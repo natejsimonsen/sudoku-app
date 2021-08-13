@@ -32,7 +32,9 @@ const Header = ({ siteTitle }) => {
         </h1>
         <div className="flex space-x-4">
           {Object.keys(colors).map(key => (
-            <button onClick={handleClick.bind(null, key)}>{key}</button>
+            <button key={key} onClick={handleClick.bind(null, key)}>
+              {key}
+            </button>
           ))}
         </div>
       </div>
