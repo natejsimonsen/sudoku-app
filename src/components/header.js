@@ -1,10 +1,10 @@
 import * as React from "react"
-import PropTypes from "prop-types"
 import { useUserConfig } from "../context/userConfigContext"
 import { Link } from "gatsby"
 import colors from "../config/colors"
+import Dropdown from "./Dropdown"
 
-const Header = ({ siteTitle }) => {
+const Header = () => {
   const { state, dispatch } = useUserConfig()
 
   const handleClick = theme => {
@@ -14,8 +14,8 @@ const Header = ({ siteTitle }) => {
   return (
     <header
       style={{
-        background: state.theme.navBgColor,
-        color: state.theme.color,
+        background: state?.theme.navBgColor,
+        color: state?.theme.color,
         marginBottom: `1.45rem`,
       }}
     >
@@ -31,23 +31,11 @@ const Header = ({ siteTitle }) => {
           <Link to="/">Sudoku</Link>
         </h1>
         <div className="flex space-x-4">
-          {Object.keys(colors).map(key => (
-            <button key={key} onClick={handleClick.bind(null, key)}>
-              {key}
-            </button>
-          ))}
+          <Dropdown onClick={handleClick} keys={Object.keys(colors)} />
         </div>
       </div>
     </header>
   )
-}
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
 }
 
 export default Header

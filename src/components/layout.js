@@ -20,8 +20,8 @@ const Layout = ({ children }) => {
   return (
     <div
       style={{
-        backgroundColor: state.theme.bgColor,
-        color: state.theme.color,
+        backgroundColor: state?.theme.bgColor,
+        color: state?.theme.color,
       }}
     >
       <div
@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
         </div>
       </div>
       <footer
-        style={{ backgroundColor: state.theme.navBgColor }}
+        style={{ backgroundColor: state?.theme.navBgColor }}
         className="flex items-center justify-center w-full h-20 bottom-0"
       >
         © {new Date().getFullYear()}, Built by Nate Simonsen
