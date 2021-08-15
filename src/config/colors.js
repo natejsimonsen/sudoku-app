@@ -1,16 +1,16 @@
 const colors = {
-  Light: {
+  "Simple Light": {
     color: "#333",
     navBgColor: "#f2f2f2",
     bgColor: "#fdfdfd",
     borderColor: "#555",
     boldBorderColor: "#111",
-    highlightBgColor: "#f5f2f2",
+    highlightBgColor: "#e5e5e5",
     darkerHighlightBg: "#d3e5f0",
     successColor: "#3e67ab",
     errorColor: "#ab3e3e",
   },
-  Dark: {
+  "Simple Dark": {
     color: "#bbb",
     navBgColor: "#333",
     bgColor: "#222",
@@ -28,10 +28,12 @@ const colors = {
     borderColor: "#a89984",
     boldBorderColor: "#fe8019",
     highlightBgColor: "#3c3836",
-    darkerHighlightBg: "#282828",
-    successColor: "#b8bb26",
+    darkerHighlightBg: "#665c54",
+    successColor: "#8ec07c",
     errorColor: "#cc241d",
   },
-}
+};
 
-export default colors
+colors.default = colors["Simple Light"];
+
+export default colors;

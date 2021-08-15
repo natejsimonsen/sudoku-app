@@ -26,6 +26,7 @@ const SudokuCell = ({ i, x, ...props }) => {
   let sudokuNumberColor = state?.theme.color
 
   if (props.number !== 0) sudokuNumberColor = state?.theme.color
+  else if (!state?.showUserErrors) sudokuNumberColor = state?.theme.successColor
   else if (props.correctNumber === +sudokuNum)
     sudokuNumberColor = state?.theme.successColor
   else if (!sudokuNum) sudokuNumberColor = state?.theme.color
@@ -37,22 +38,37 @@ const SudokuCell = ({ i, x, ...props }) => {
     props.currentCol === col
   ) {
     backgroundColor = state?.theme.darkerHighlightBg
-  } else if (props.currentBlock === props.block) {
+  } else if (props.currentBlock === props.block && state?.highlightBlocks) {
     backgroundColor = state?.theme.highlightBgColor
   } else if (
     props.colBlock?.includes(props.block) &&
-    props.currentCol === col
+    props.currentCol === col &&
+    state?.highlightCols
   ) {
     backgroundColor = state?.theme.highlightBgColor
   } else if (
     props.rowBlock?.includes(props.block) &&
-    props.currentRow === row
+    props.currentRow === row &&
+    state?.highlightRows
   ) {
     backgroundColor = state?.theme.highlightBgColor
   } else if (
     props.activeNum !== 0 &&
     (props.number !== 0 || sudokuNum) &&
-    (props.number === props.activeNum || sudokuNum === props.activeNum)
+    (props.number === props.activeNum || sudokuNum === props.activeNum) &&
+    state?.highlightSameNumbers
+  ) {
+    backgroundColor = state?.theme.highlightBgColor
+  } else if (
+    props.currentBlock === props.block &&
+    state?.highlightCols &&
+    col === props.currentCol
+  ) {
+    backgroundColor = state?.theme.highlightBgColor
+  } else if (
+    props.currentBlock === props.block &&
+    state?.highlightRows &&
+    row === props.currentRow
   ) {
     backgroundColor = state?.theme.highlightBgColor
   }

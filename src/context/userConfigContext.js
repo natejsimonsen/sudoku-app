@@ -1,44 +1,80 @@
-import React, { useContext, useReducer } from "react"
-import colors from "../config/colors"
+import React, { useContext, useReducer } from "react";
+import colors from "../config/colors";
+
+const userSettings = localStorage.getItem("settings");
+
+let config;
 
 const defaultConfig = {
   notes: false,
   showUserErrors: true,
-  theme: {
-    ...colors.Light,
-  },
+  highlightBlocks: true,
+  highlightRows: true,
+  highlightCols: true,
+  highlightSameNumbers: true,
+  theme: colors.default,
+};
+
+if (userSettings) {
+  config = JSON.parse(userSettings);
+} else {
+  config = defaultConfig;
 }
 
-const UserConfigContext = React.createContext(defaultConfig)
+const UserConfigContext = React.createContext(config);
 
 const userConfigReducer = (state, action) => {
+  let settings;
   switch (action.type) {
     case "changeTheme":
-      return { ...state, theme: action.theme }
+      settings = { ...state, theme: action.theme };
+      break;
     case "toggleNotes":
-      return { ...state, notes: !state.notes }
+      settings = { ...state, notes: !state.notes };
+      break;
     case "toggleErrors":
-      return { ...state, showUserErrors: !state.showUserErrors }
+      settings = { ...state, showUserErrors: !state.showUserErrors };
+      break;
+    case "highlightBlocks":
+      settings = { ...state, highlightBlocks: !state.highlightBlocks };
+      break;
+    case "highlightRows":
+      settings = { ...state, highlightRows: !state.highlightRows };
+      break;
+    case "highlightColumns":
+      settings = { ...state, highlightCols: !state.highlightCols };
+      break;
+    case "highlightSameNumbers":
+      settings = {
+        ...state,
+        highlightSameNumbers: !state.highlightSameNumbers,
+      };
+      break;
+    case "highlightNumbers":
+      settings = { ...state, showUserErrors: !state.showUserErrors };
+      break;
     default:
       throw new Error(
         `There is no action with type of ${action.type} in userConfigReducer, please specify a valid option`
-      )
+      );
   }
-}
+  localStorage.setItem("settings", JSON.stringify(settings));
+  return settings;
+};
 
 const UserConfigProvider = ({ children }) => {
-  const context = useReducer(userConfigReducer, defaultConfig)
+  const context = useReducer(userConfigReducer, config);
   return (
     <UserConfigContext.Provider value={context}>
       {children}
     </UserConfigContext.Provider>
-  )
-}
+  );
+};
 
 const useUserConfig = () => {
-  const [state, dispatch] = useContext(UserConfigContext)
-  const value = { state, dispatch }
-  return value
-}
+  const [state, dispatch] = useContext(UserConfigContext);
+  const value = { state, dispatch };
+  return value;
+};
 
-export { UserConfigProvider, useUserConfig }
+export { UserConfigProvider, useUserConfig };

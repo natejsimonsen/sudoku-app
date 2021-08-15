@@ -30,7 +30,11 @@ export default function Dropdown(props) {
         >
           <div className="px-8 pt-2 pb-4 space-y-4 divide-y">
             {props.keys.map(key => (
-              <Menu.Item as="button" onClick={props.onClick.bind(null, key)}>
+              <Menu.Item
+                key={key}
+                as="button"
+                onClick={props.onClick.bind(null, key)}
+              >
                 <div className="flex items-center pt-4">
                   <div
                     className="w-8 flex items-center justify-center shadow-2xl h-8 mx-4 rounded-full"
