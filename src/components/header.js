@@ -71,27 +71,27 @@ const Header = () => {
             />
             <div className="flex flex-col space-y-4 divide-y w-3/4 mx-auto">
               <Switch
-                clicked={dispatch.bind(null, { type: "highlightBlocks" })}
+                clicked={dispatch?.bind(null, { type: "highlightBlocks" })}
                 checked={state?.highlightBlocks}
                 label="Highlight Blocks"
               />
               <Switch
-                clicked={dispatch.bind(null, { type: "highlightRows" })}
+                clicked={dispatch?.bind(null, { type: "highlightRows" })}
                 checked={state?.highlightRows}
                 label="Highlight Rows"
               />
               <Switch
-                clicked={dispatch.bind(null, { type: "highlightColumns" })}
+                clicked={dispatch?.bind(null, { type: "highlightColumns" })}
                 checked={state?.highlightCols}
                 label="Highlight Columns"
               />
               <Switch
-                clicked={dispatch.bind(null, { type: "highlightSameNumbers" })}
+                clicked={dispatch?.bind(null, { type: "highlightSameNumbers" })}
                 checked={state?.highlightSameNumbers}
                 label="Highlight Same Numbers"
               />
               <Switch
-                clicked={dispatch.bind(null, { type: "toggleErrors" })}
+                clicked={dispatch?.bind(null, { type: "toggleErrors" })}
                 checked={state?.showUserErrors}
                 label="Autocheck Mistakes"
               />

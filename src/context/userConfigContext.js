@@ -1,7 +1,8 @@
 import React, { useContext, useReducer } from "react";
 import colors from "../config/colors";
 
-const userSettings = localStorage.getItem("settings");
+const userSettings =
+  typeof localStorage !== "undefined" && localStorage.getItem("settings");
 
 let config;
 
@@ -58,7 +59,8 @@ const userConfigReducer = (state, action) => {
         `There is no action with type of ${action.type} in userConfigReducer, please specify a valid option`
       );
   }
-  localStorage.setItem("settings", JSON.stringify(settings));
+  typeof localStorage !== "undefined" &&
+    localStorage.setItem("settings", JSON.stringify(settings));
   return settings;
 };
 
