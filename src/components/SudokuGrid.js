@@ -1,51 +1,62 @@
-import React, { useState } from "react"
-import SudokuBlock from "./SudokuBlock"
+import React, { useState, useEffect } from "react";
+import SudokuBlock from "./SudokuBlock";
+import { useSudoku } from "../context/sudokuContext";
+import _ from "lodash";
 
-const SudokuGrid = props => {
-  const [currentBlock, setCurrentBlock] = useState(null)
-  const [currentRow, setCurrentRow] = useState(null)
-  const [currentCol, setCurrentCol] = useState(null)
-  const [currentNum, setCurrentNum] = useState(null)
-  const [rowBlock, setRowBlock] = useState(null)
-  const [colBlock, setColBlock] = useState(null)
+const SudokuGrid = (props) => {
+  const { setState } = useSudoku();
+  const [currentBlock, setCurrentBlock] = useState(null);
+  const [currentRow, setCurrentRow] = useState(null);
+  const [currentCol, setCurrentCol] = useState(null);
+  const [currentNum, setCurrentNum] = useState(null);
+  const [rowBlock, setRowBlock] = useState(null);
+  const [colBlock, setColBlock] = useState(null);
 
-  const handleBlockClick = e => {
-    if (props.loading) return
+  const handleBlockClick = (e) => {
+    if (props.loading) return;
 
-    const block = e.target.closest(".sudoku-block")
-    const sudokuCell = e.target.closest(".sudoku-cell")
+    const block = e.target.closest(".sudoku-block");
+    const sudokuCell = e.target.closest(".sudoku-cell");
 
-    const rowNum = +sudokuCell.dataset.row
-    const columnNum = +sudokuCell.dataset.column
-    const currentNumber = +sudokuCell.dataset.number
-    const blockNum = +block.dataset.block
+    const rowNum = +sudokuCell.dataset.row;
+    const columnNum = +sudokuCell.dataset.column;
+    const currentNumber = +sudokuCell.dataset.number;
+    const blockNum = +block.dataset.block;
 
-    const topBlock = blockNum <= 2
-    const middleBlock = blockNum > 2 && blockNum < 6
-    const bottomBlock = blockNum > 5
-    const leftBlock = blockNum % 3 === 0
-    const middleRowBlock = blockNum % 3 === 1
-    const rightBlock = blockNum % 3 === 2
+    const topBlock = blockNum <= 2;
+    const middleBlock = blockNum > 2 && blockNum < 6;
+    const bottomBlock = blockNum > 5;
+    const leftBlock = blockNum % 3 === 0;
+    const middleRowBlock = blockNum % 3 === 1;
+    const rightBlock = blockNum % 3 === 2;
 
-    let columnBlockIndex = []
-    let rowBlockIndex = []
+    let columnBlockIndex = [];
+    let rowBlockIndex = [];
 
-    if (topBlock) columnBlockIndex = [blockNum + 3, blockNum + 6]
-    if (middleBlock) columnBlockIndex = [blockNum - 3, blockNum + 3]
-    if (bottomBlock) columnBlockIndex = [blockNum - 3, blockNum - 6]
-    if (leftBlock) rowBlockIndex = [blockNum + 1, blockNum + 2]
-    if (middleRowBlock) rowBlockIndex = [blockNum - 1, blockNum + 1]
-    if (rightBlock) rowBlockIndex = [blockNum - 1, blockNum - 2]
+    if (topBlock) columnBlockIndex = [blockNum + 3, blockNum + 6];
+    if (middleBlock) columnBlockIndex = [blockNum - 3, blockNum + 3];
+    if (bottomBlock) columnBlockIndex = [blockNum - 3, blockNum - 6];
+    if (leftBlock) rowBlockIndex = [blockNum + 1, blockNum + 2];
+    if (middleRowBlock) rowBlockIndex = [blockNum - 1, blockNum + 1];
+    if (rightBlock) rowBlockIndex = [blockNum - 1, blockNum - 2];
 
-    setCurrentBlock(blockNum)
-    setCurrentRow(rowNum)
-    setCurrentCol(columnNum)
-    setRowBlock(rowBlockIndex)
-    setColBlock(columnBlockIndex)
-    setCurrentNum(currentNumber)
-  }
+    setCurrentBlock(blockNum);
+    setCurrentRow(rowNum);
+    setCurrentCol(columnNum);
+    setRowBlock(rowBlockIndex);
+    setColBlock(columnBlockIndex);
+    setCurrentNum(currentNumber);
+  };
 
-  const sudokuGridWidth = 600
+  // min is 320 px
+  // max is none
+  // best results within 400-800 px
+  const sudokuGridWidth = 700;
+
+  useEffect(() => {
+    setState(_.cloneDeep(props.data));
+  }, [props.loading]);
+
   return (
     <section
       className="grid grid-cols-3 grid-rows-3"
@@ -53,9 +64,9 @@ const SudokuGrid = props => {
       onMouseDown={handleBlockClick}
       id="sudokuGrid"
     >
-      {props?.data?.puzzle.map((block, i) => (
+      {props.data?.puzzle?.map((block, i) => (
         <SudokuBlock
-          completeBlock={props?.data?.complete[i]}
+          completeBlock={props.data?.complete[i]}
           currentBlock={currentBlock}
           currentRow={currentRow}
           currentCol={currentCol}
@@ -70,7 +81,7 @@ const SudokuGrid = props => {
         />
       ))}
     </section>
-  )
-}
+  );
+};
 
-export default SudokuGrid
+export default SudokuGrid;

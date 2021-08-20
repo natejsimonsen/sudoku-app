@@ -1,21 +1,23 @@
-import React from "react"
+import React from "react";
 
-const SudokuContext = React.createContext()
+const SudokuContext = React.createContext();
 
 function SudokuProvider({ children }) {
-  const [state, setState] = React.useState([])
-  const value = { state, setState }
+  const [state, setState] = React.useState([]);
+  const value = { state, setState };
   return (
     <SudokuContext.Provider value={value}>{children}</SudokuContext.Provider>
-  )
+  );
 }
 
 function useSudoku() {
-  const context = React.useContext(SudokuContext)
+  const context = React.useContext(SudokuContext);
   if (context === undefined) {
-    throw new Error("useCount must be used within a CountProvider")
+    throw new Error(
+      "useSudoku  must be used within a SudokuProvider component"
+    );
   }
-  return context
+  return context;
 }
 
-export { SudokuProvider, useSudoku }
+export { SudokuProvider, useSudoku };
