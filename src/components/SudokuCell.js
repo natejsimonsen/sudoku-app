@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useUserConfig } from "../context/userConfigContext";
 import { useSudoku } from "../context/sudokuContext";
+import _ from "lodash";
 
 const SudokuCell = ({ i, x, ...props }) => {
-  const { setState } = useSudoku();
+  const { state: sudokuState, setState } = useSudoku();
   const { state } = useUserConfig();
 
   const row = Math.floor(i / 3);
@@ -12,33 +13,69 @@ const SudokuCell = ({ i, x, ...props }) => {
   const [sudokuNum, setSudokuNum] = useState("");
 
   const handleChange = (e) => {
-    const newNumber = Number.parseInt(e.target.value);
-    const secondNumber = Number.parseInt(String(newNumber).slice(-1));
-
+    const key = +e.key;
     let newNum;
+    let newState = _.cloneDeep(sudokuState);
 
-    if (!Number.isNaN(newNumber) && newNumber > 0 && secondNumber !== 0) {
-      newNum = Number.parseInt(String(newNumber).slice(-1));
-      setSudokuNum(newNum);
-      props.setActiveNum(newNum);
-    } else if (e.target.value === "") {
-      newNum = 0;
+    if (!state?.notes) {
+      if (!Number.isNaN(key) && key > 0) {
+        newNum = key;
+        setSudokuNum(key);
+        props.setActiveNum(key);
+      } else if (e.key === "Backspace" || e.key === "Delete") {
+        newNum = 0;
+        setSudokuNum("");
+        props.setActiveNum(newNum);
+      }
+
+      if (newNum === 0) newState.puzzle[props.block][row][col] = 0;
+      else newState.puzzle[props.block][row][col] = { number: newNum };
+    } else {
+      if (
+        (!Array.isArray(props.number) || props.number === 0) &&
+        Number.isFinite(key) &&
+        key > 0
+      ) {
+        newState.puzzle[props.block][row][col] = [key];
+      } else if (props.number.includes(key)) {
+        const removeIndex = newState.puzzle[props.block][row][col].findIndex(
+          (val) => val === key
+        );
+        newState.puzzle[props.block][row][col].sort().splice(removeIndex, 1);
+      } else if (Number.isFinite(key) && key > 0) {
+        newState.puzzle[props.block][row][col] = newState.puzzle[props.block][
+          row
+        ][col]
+          .sort()
+          .concat(key);
+      }
+
+      if (props.number.length > 0 && e.key === "Backspace")
+        newState.puzzle[props.block][row][col] = newState.puzzle[props.block][
+          row
+        ][col]
+          .sort()
+          .slice(0, -1);
+      else if (props.number.length > 0 && e.key === "Delete")
+        newState.puzzle[props.block][row][col] = newState.puzzle[props.block][
+          row
+        ][col]
+          .sort()
+          .slice(1);
+
+      if (newState.puzzle[props.block][row][col].length === 0)
+        newState.puzzle[props.block][row][col] = [];
+      props.setActiveNum(0);
       setSudokuNum("");
-      props.setActiveNum(newNum);
     }
-
-    setState((prevState) => {
-      prevState.puzzle[props.block][row][col] = newNum;
-      return prevState;
-    });
+    setState(newState);
   };
 
   let backgroundColor = state?.theme.bgColor;
   let sudokuNumberColor = state?.theme.color;
 
-  if (props.number !== 0) sudokuNumberColor = state?.theme.color;
-  else if (!state?.showUserErrors)
-    sudokuNumberColor = state?.theme.successColor;
+  if (!state?.showUserErrors)
+    sudokuNumberColor = state?.theme.userSudokuNumColor;
   else if (props.correctNumber === +sudokuNum)
     sudokuNumberColor = state?.theme.successColor;
   else if (!sudokuNum) sudokuNumberColor = state?.theme.color;
@@ -99,42 +136,49 @@ const SudokuCell = ({ i, x, ...props }) => {
     borderStyle.borderLeft = `1px solid ${state?.theme.boldBorderColor}`;
   }
 
+  const normalModeClass =
+    "sudoku-cell font-semibold flex justify-center text-center items-center";
+  const notesModeClass =
+    "font-semibold text-center sudoku-cell grid grid-cols-3 grid-rows-3 flex justify-center items-center";
+
   return (
     <div
-      className={`font-semibold sudoku-cell flex justify-center text-center items-center`}
+      className={
+        !Array.isArray(props.number) ? normalModeClass : notesModeClass
+      }
       style={{
-        fontSize: x / 14,
+        fontSize: !Array.isArray(props.number) ? x / 14 : x / 42,
         height: x / 9,
         width: x / 9,
+        outline: "none",
+        ...borderStyle,
+        backgroundColor,
+        color: !Array.isArray(props.number)
+          ? sudokuNumberColor
+          : state?.theme.color,
       }}
-      data-row={Math.floor(i / 3)}
-      data-column={i % 3}
+      data-row={row}
+      data-column={col}
       data-number={sudokuNum || props.number}
-      onClick={() => {
-        if (state?.notes)
-          setState((prevState) => {
-            prevState.puzzle[props.block][row][col] = 0;
-            return prevState;
-          });
-      }}
+      tabIndex={0}
+      onKeyDown={handleChange}
     >
-      <textarea
-        style={{
-          resize: "none",
-          width: x / 9,
-          height: x / 9,
-          outline: "none",
-          ...borderStyle,
-          backgroundColor: backgroundColor,
-          color: sudokuNumberColor,
-          cursor: "default",
-          caretColor: "transparent",
-        }}
-        onChange={handleChange}
-        className="flex items-center text-center"
-        value={props.number !== 0 ? props.number : sudokuNum}
-        readOnly={props.number !== 0}
-      />
+      {!Array.isArray(props.number) ? (
+        <p>{props.number !== 0 ? props.number : sudokuNum}</p>
+      ) : (
+        <>
+          {props.number.map((note) => (
+            <p
+              key={note}
+              className={`row-start-${
+                Math.floor((note - 1) / 3) + 1
+              } col-start-${((note - 1) % 3) + 1}`}
+            >
+              {note}
+            </p>
+          ))}
+        </>
+      )}
     </div>
   );
 };

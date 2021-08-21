@@ -9,7 +9,7 @@ import SudokuGrid from "../components/SudokuGrid";
 import SudokuToolbar from "../components/SudokuToolbar";
 
 const IndexPage = () => {
-  const apiUrl = process.env.GATSBY_API_URL || "http://localhost:3000";
+  const apiUrl = "http://localhost:3000";
   const { loading, error, data } = useFetch(apiUrl, {}, []);
 
   return (
@@ -21,7 +21,7 @@ const IndexPage = () => {
             {error && <p>{error}</p>}
             <SudokuGrid loading={loading} data={data} />
             <SudokuToolbar />
-            {process.env.GATSBY_API_URL && (
+            {process.env.GATSBY_PRODUCTION && (
               <p className="max-w-lg mx-auto block pt-8">
                 More Features shall be added, including user options,
                 customizable themes, and difficulty levels, as well as speed

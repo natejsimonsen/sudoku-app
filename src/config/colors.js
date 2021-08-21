@@ -9,6 +9,7 @@ const colors = {
     darkerHighlightBg: "#d3e5f0",
     successColor: "#3e67ab",
     errorColor: "#ab3e3e",
+    userSudokuNumColor: "#222",
   },
   "Simple Dark": {
     color: "#bbb",
@@ -20,6 +21,7 @@ const colors = {
     darkerHighlightBg: "#4b5a63",
     successColor: "#65c271",
     errorColor: "#db3d3d",
+    userSudokuNumColor: "#ccc",
   },
   Gruvbox: {
     color: "#a89984",
@@ -31,6 +33,7 @@ const colors = {
     darkerHighlightBg: "#665c54",
     successColor: "#8ec07c",
     errorColor: "#cc241d",
+    userSudokuNumColor: "#83a598",
   },
 };
 

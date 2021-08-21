@@ -4,7 +4,7 @@ import { useSudoku } from "../context/sudokuContext";
 import _ from "lodash";
 
 const SudokuGrid = (props) => {
-  const { setState } = useSudoku();
+  const { state, setState } = useSudoku();
   const [currentBlock, setCurrentBlock] = useState(null);
   const [currentRow, setCurrentRow] = useState(null);
   const [currentCol, setCurrentCol] = useState(null);
@@ -51,10 +51,11 @@ const SudokuGrid = (props) => {
   // min is 320 px
   // max is none
   // best results within 400-800 px
-  const sudokuGridWidth = 700;
+  const sudokuGridWidth = 650;
 
   useEffect(() => {
-    setState(_.cloneDeep(props.data));
+    const originalData = _.cloneDeep(props.data);
+    setState(originalData);
   }, [props.loading]);
 
   return (
@@ -64,7 +65,7 @@ const SudokuGrid = (props) => {
       onMouseDown={handleBlockClick}
       id="sudokuGrid"
     >
-      {props.data?.puzzle?.map((block, i) => (
+      {state?.puzzle?.map((block, i) => (
         <SudokuBlock
           completeBlock={props.data?.complete[i]}
           currentBlock={currentBlock}

@@ -1,12 +1,8 @@
 import React from "react";
-import SudokuNotesCell from "./SudokuNotesCell";
 import SudokuCell from "./SudokuCell";
-import { useUserConfig } from "../context/userConfigContext";
-import { useSudoku } from "../context/sudokuContext";
+import SudokuLockedCell from "./SudokuLockedCell";
 
 const SudokuBlock = ({ loading, ...props }) => {
-  const { state } = useUserConfig();
-  const { state: sudokuState } = useSudoku();
   return (
     <div className="shadow-lg sudoku-block" data-block={props.i}>
       <div className="flex items-center justify-center grid grid-cols-3 grid-rows-3">
@@ -14,8 +10,7 @@ const SudokuBlock = ({ loading, ...props }) => {
           props.block
             .flat()
             .map((item, i) =>
-              !state?.notes ||
-              sudokuState?.puzzle[props.i][Math.floor(i / 3)][i % 3] !== 0 ? (
+              typeof item === "object" || item === 0 ? (
                 <SudokuCell
                   correctNumber={props.completeBlock.flat()[i]}
                   currentBlock={props.currentBlock}
@@ -27,12 +22,12 @@ const SudokuBlock = ({ loading, ...props }) => {
                   block={props.i}
                   setActiveNum={props.setActiveNum}
                   i={i}
-                  number={item}
+                  number={item.number || item}
                   x={props.x}
                   key={i}
                 />
               ) : (
-                <SudokuNotesCell
+                <SudokuLockedCell
                   correctNumber={props.completeBlock.flat()[i]}
                   currentBlock={props.currentBlock}
                   currentRow={props.currentRow}
@@ -43,7 +38,7 @@ const SudokuBlock = ({ loading, ...props }) => {
                   block={props.i}
                   setActiveNum={props.setActiveNum}
                   i={i}
-                  number={item}
+                  number={item.number || item}
                   x={props.x}
                   key={i}
                 />
