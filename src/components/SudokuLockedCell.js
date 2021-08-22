@@ -86,7 +86,9 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
       data-column={i % 3}
       data-number={props.number}
     >
-      <p className="flex items-center text-center">{props.number}</p>
+      {props.number !== 0 && (
+        <p className="flex items-center text-center">{props.number}</p>
+      )}
     </div>
   );
 };

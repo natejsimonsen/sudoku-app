@@ -19,8 +19,10 @@ const IndexPage = () => {
           <Layout>
             <Seo title="Sudoku Puzzle" />
             {error && <p>{error}</p>}
-            <SudokuGrid loading={loading} data={data} />
-            <SudokuToolbar />
+            <div className="flex justify-between max-w-6xl mx-auto">
+              <SudokuGrid loading={loading} data={data} />
+              <SudokuToolbar />
+            </div>
             {process.env.GATSBY_PRODUCTION && (
               <p className="max-w-lg mx-auto block pt-8">
                 More Features shall be added, including user options,

@@ -1,11 +1,11 @@
-import React, { Fragment } from "react"
-import { Menu, Transition } from "@headlessui/react"
-import { ChevronDownIcon } from "@heroicons/react/solid"
-import { useUserConfig } from "../context/userConfigContext"
-import colors from "../config/colors"
+import React, { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/solid";
+import { useUserConfig } from "../context/userConfigContext";
+import colors from "../config/colors";
 
 export default function Dropdown(props) {
-  const { state } = useUserConfig()
+  const { state } = useUserConfig();
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -26,10 +26,10 @@ export default function Dropdown(props) {
       >
         <Menu.Items
           style={{ backgroundColor: state?.theme.navBgColor }}
-          className="absolute right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md focus:outline-none"
+          className="absolute z-50 right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md focus:outline-none"
         >
           <div className="px-8 pt-2 pb-4 space-y-4 divide-y">
-            {props.keys.map(key => (
+            {props.keys.map((key) => (
               <Menu.Item
                 key={key}
                 as="button"
@@ -57,5 +57,5 @@ export default function Dropdown(props) {
         </Menu.Items>
       </Transition>
     </Menu>
-  )
+  );
 }

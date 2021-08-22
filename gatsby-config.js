@@ -14,7 +14,7 @@ module.exports = {
           google: [
             {
               family: "Open Sans",
-              variants: ["300", "400", "500"],
+              variants: ["300", "400", "500", "600", "700", "800"],
             },
           ],
         },

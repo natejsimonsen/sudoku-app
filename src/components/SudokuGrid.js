@@ -1,16 +1,43 @@
 import React, { useState, useEffect } from "react";
 import SudokuBlock from "./SudokuBlock";
 import { useSudoku } from "../context/sudokuContext";
+import { useKey } from "react-use";
 import _ from "lodash";
 
 const SudokuGrid = (props) => {
-  const { state, setState } = useSudoku();
+  const [state, dispatch] = useSudoku();
   const [currentBlock, setCurrentBlock] = useState(null);
   const [currentRow, setCurrentRow] = useState(null);
   const [currentCol, setCurrentCol] = useState(null);
   const [currentNum, setCurrentNum] = useState(null);
   const [rowBlock, setRowBlock] = useState(null);
   const [colBlock, setColBlock] = useState(null);
+
+  const acceptedKeys = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "Backspace",
+    "Delete",
+  ];
+
+  const keyPressHandler = (event) => {
+    if (Number.isFinite(+event.key)) {
+      dispatch({ type: "changeNum", data: +event.key });
+    } else if (event.key === "Backspace" || event.key === "Delete") {
+      dispatch({ type: "changeNum", data: event.key });
+    } else {
+      dispatch("these keys move the sudoku app");
+    }
+  };
+
+  useKey((event) => acceptedKeys.includes(event.key), keyPressHandler);
 
   const handleBlockClick = (e) => {
     if (props.loading) return;
@@ -55,7 +82,7 @@ const SudokuGrid = (props) => {
 
   useEffect(() => {
     const originalData = _.cloneDeep(props.data);
-    setState(originalData);
+    dispatch({ type: "initialize", data: originalData });
   }, [props.loading]);
 
   return (
@@ -65,6 +92,16 @@ const SudokuGrid = (props) => {
       onMouseDown={handleBlockClick}
       id="sudokuGrid"
     >
+      {(!state || !state.puzzle || state?.puzzle?.length === 0) &&
+        [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, i) => (
+          <SudokuBlock
+            dumb
+            x={sudokuGridWidth}
+            key={item}
+            i={i}
+            block={[0, 0, 0, 0, 0, 0, 0, 0, 0]}
+          />
+        ))}
       {state?.puzzle?.map((block, i) => (
         <SudokuBlock
           completeBlock={props.data?.complete[i]}
