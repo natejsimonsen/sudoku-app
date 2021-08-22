@@ -9,14 +9,9 @@ const SudokuBlock = (props) => {
         {props.dumb
           ? props.block.map((item, i) => (
               <SudokuLockedCell
-                currentBlock={props.currentBlock}
-                currentRow={props.currentRow}
-                currentCol={props.currentCol}
-                activeNum={props.currentNum}
                 rowBlock={props.rowBlock}
                 colBlock={props.colBlock}
                 block={props.i}
-                setActiveNum={props.setActiveNum}
                 i={i}
                 number={item}
                 x={props.x}
@@ -29,14 +24,9 @@ const SudokuBlock = (props) => {
                 typeof item === "object" || item === 0 ? (
                   <SudokuCell
                     correctNumber={props.completeBlock.flat()[i]}
-                    currentBlock={props.currentBlock}
-                    currentRow={props.currentRow}
-                    currentCol={props.currentCol}
-                    activeNum={props.currentNum}
                     rowBlock={props.rowBlock}
                     colBlock={props.colBlock}
                     block={props.i}
-                    setActiveNum={props.setActiveNum}
                     i={i}
                     number={item.number || item}
                     x={props.x}
@@ -44,15 +34,9 @@ const SudokuBlock = (props) => {
                   />
                 ) : (
                   <SudokuLockedCell
-                    correctNumber={props.completeBlock.flat()[i]}
-                    currentBlock={props.currentBlock}
-                    currentRow={props.currentRow}
-                    currentCol={props.currentCol}
-                    activeNum={props.currentNum}
                     rowBlock={props.rowBlock}
                     colBlock={props.colBlock}
                     block={props.i}
-                    setActiveNum={props.setActiveNum}
                     i={i}
                     number={item}
                     x={props.x}

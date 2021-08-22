@@ -6,12 +6,14 @@ const defaultSudokuGrid = {
   complete: [],
   history: [],
   currentNumber: 0,
+  activeBlock: null,
+  activeCol: null,
+  activeRow: null,
+  activeNum: null,
   keyHit: false,
 };
 
 let historyIndex = 0;
-let initialized = false;
-let originalPuzzle;
 
 const SudokuContext = React.createContext();
 
@@ -19,12 +21,10 @@ function sudokuReducer(state, action) {
   let newState = _.cloneDeep(state);
   switch (action.type) {
     case "initialize":
-      initialized = true;
       newState = {
         ...defaultSudokuGrid,
         ...action.data,
       };
-      originalPuzzle = _.cloneDeep(action?.data?.puzzle);
       break;
     case "addItem":
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] =
@@ -64,28 +64,48 @@ function sudokuReducer(state, action) {
       };
       break;
     case "undo":
-      if (newState.history.length > 0) {
-        newState.history.pop();
-        let puzzle = null;
-        if (newState.history.length !== 0)
-          puzzle = newState.history[newState.history.length - 1];
-        newState = {
-          ..._.cloneDeep(newState),
-          puzzle: puzzle || originalPuzzle,
-        };
-
-        console.log(newState);
+      historyIndex--;
+      if (historyIndex >= 0) {
+        const [grid, data] = newState.history[historyIndex];
+        const [block, row, col] = grid;
+        if (data === 0) historyIndex--;
+        newState.puzzle[block][row][col] = data;
+        console.log(grid, data);
+        newState.currentBlock = block;
+        newState.currentRow = row;
+        newState.currentCol = col;
+        newState.currentNum = data.number || data;
       }
       break;
     case "redo":
-      // historyIndex++;
-      console.log(historyIndex);
-      // if (historyIndex < newState.history.length)
-      //   newState.puzzle = newState.history[historyIndex];
+      if (historyIndex < newState.history.length) {
+        historyIndex++;
+        if (newState.history.length !== historyIndex) {
+          const [grid, data] = newState.history[historyIndex];
+          const [block, row, col] = grid;
+          newState.puzzle[block][row][col] = data;
+          newState.currentBlock = block;
+          newState.currentRow = row;
+          newState.currentCol = col;
+          newState.currentNum = data;
+        }
+      }
       break;
     case "setHistory":
-      newState.history.push(_.cloneDeep(newState.puzzle));
-      historyIndex = newState.history.length;
+      newState.history.push([
+        action.grid,
+        typeof action.data !== "undefined"
+          ? action.data
+          : newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]],
+      ]);
+      historyIndex = newState.history.length - 1;
+      break;
+    case "setHighlights":
+      const [block, row, col, num] = action.data;
+      newState.currentBlock = block;
+      newState.currentRow = row;
+      newState.currentCol = col;
+      newState.currentNum = num;
       break;
     default:
       throw new Error(

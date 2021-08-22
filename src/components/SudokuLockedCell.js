@@ -1,8 +1,10 @@
 import React from "react";
 import { useUserConfig } from "../context/userConfigContext";
+import { useSudoku } from "../context/sudokuContext";
 
 const SudokuLockedCell = ({ i, x, ...props }) => {
   const { state } = useUserConfig();
+  const [sudokuState] = useSudoku();
 
   const row = Math.floor(i / 3);
   const col = i % 3;
@@ -16,42 +18,45 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
   else sudokuNumberColor = state?.theme.errorColor;
 
   if (
-    props.currentBlock === props.block &&
-    props.currentRow === row &&
-    props.currentCol === col
+    sudokuState.currentBlock === props.block &&
+    sudokuState.currentRow === row &&
+    sudokuState.currentCol === col
   ) {
     backgroundColor = state?.theme.darkerHighlightBg;
-  } else if (props.currentBlock === props.block && state?.highlightBlocks) {
+  } else if (
+    sudokuState.currentBlock === props.block &&
+    state?.highlightBlocks
+  ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
     props.colBlock?.includes(props.block) &&
-    props.currentCol === col &&
+    sudokuState.currentCol === col &&
     state?.highlightCols
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
     props.rowBlock?.includes(props.block) &&
-    props.currentRow === row &&
+    sudokuState.currentRow === row &&
     state?.highlightRows
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.activeNum !== 0 &&
+    sudokuState.currentNum !== 0 &&
     props.number !== 0 &&
-    props.number === props.activeNum &&
+    props.number === sudokuState.currentNum &&
     state?.highlightSameNumbers
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.currentBlock === props.block &&
+    sudokuState.currentBlock === props.block &&
     state?.highlightCols &&
-    col === props.currentCol
+    col === sudokuState.currentCol
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.currentBlock === props.block &&
+    sudokuState.currentBlock === props.block &&
     state?.highlightRows &&
-    row === props.currentRow
+    row === sudokuState.currentRow
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   }

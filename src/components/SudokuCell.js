@@ -13,9 +13,9 @@ const SudokuCell = ({ i, x, ...props }) => {
 
   useEffect(() => {
     if (
-      props.currentBlock === block &&
-      props.currentRow === row &&
-      props.currentCol === col
+      sudokuState.currentBlock === block &&
+      sudokuState.currentRow === row &&
+      sudokuState.currentCol === col
     ) {
       const key = sudokuState.currentNumber;
       let newState;
@@ -23,10 +23,13 @@ const SudokuCell = ({ i, x, ...props }) => {
       if (!state?.notes) {
         if (!Number.isNaN(key) && key > 0) {
           newState = key;
-          props.setActiveNum(key);
+          dispatch({ type: "setHighlights", data: [block, row, col, key] });
         } else if (key === "Backspace" || key === "Delete") {
           newState = 0;
-          props.setActiveNum(newState);
+          dispatch({
+            type: "setHighlights",
+            data: [block, row, col, newState],
+          });
         }
 
         if (newState === 0)
@@ -77,10 +80,20 @@ const SudokuCell = ({ i, x, ...props }) => {
             grid: [block, row, col],
           });
 
-        props.setActiveNum(0);
+        dispatch({ type: "setHighlights", data: [block, row, col, 0] });
       }
+
+      if (props.number === 0) {
+        dispatch({
+          type: "setHistory",
+          data: 0,
+          grid: [block, row, col],
+        });
+      }
+
       dispatch({
         type: "setHistory",
+        grid: [block, row, col],
       });
     }
   }, [sudokuState.keyHit]);
@@ -92,54 +105,45 @@ const SudokuCell = ({ i, x, ...props }) => {
     sudokuNumberColor = state?.theme.userSudokuNumColor;
   else if (props.correctNumber === props.number)
     sudokuNumberColor = state?.theme.successColor;
-  // else if (!sudokuNum) sudokuNumberColor = state?.theme.color;
   else sudokuNumberColor = state?.theme.errorColor;
 
   if (
-    props.currentBlock === block &&
-    props.currentRow === row &&
-    props.currentCol === col
-  ) {
-    console.log(props.number);
-  }
-
-  if (
-    props.currentBlock === block &&
-    props.currentRow === row &&
-    props.currentCol === col
+    sudokuState.currentBlock === block &&
+    sudokuState.currentRow === row &&
+    sudokuState.currentCol === col
   ) {
     backgroundColor = state?.theme.darkerHighlightBg;
-  } else if (props.currentBlock === block && state?.highlightBlocks) {
+  } else if (sudokuState.currentBlock === block && state?.highlightBlocks) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
     props.colBlock?.includes(block) &&
-    props.currentCol === col &&
+    sudokuState.currentCol === col &&
     state?.highlightCols
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
     props.rowBlock?.includes(block) &&
-    props.currentRow === row &&
+    sudokuState.currentRow === row &&
     state?.highlightRows
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.activeNum !== 0 &&
+    sudokuState.currentNum !== 0 &&
     props.number !== 0 &&
-    props.number === props.activeNum &&
+    props.number === sudokuState.currentNum &&
     state?.highlightSameNumbers
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.currentBlock === block &&
+    sudokuState.currentBlock === block &&
     state?.highlightCols &&
-    col === props.currentCol
+    col === sudokuState.currentCol
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.currentBlock === block &&
+    sudokuState.currentBlock === block &&
     state?.highlightRows &&
-    row === props.currentRow
+    row === sudokuState.currentRow
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   }

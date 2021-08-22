@@ -6,10 +6,10 @@ import _ from "lodash";
 
 const SudokuGrid = (props) => {
   const [state, dispatch] = useSudoku();
-  const [currentBlock, setCurrentBlock] = useState(null);
-  const [currentRow, setCurrentRow] = useState(null);
-  const [currentCol, setCurrentCol] = useState(null);
-  const [currentNum, setCurrentNum] = useState(null);
+  // const [currentBlock, setCurrentBlock] = useState(null);
+  // const [currentRow, setCurrentRow] = useState(null);
+  // const [currentCol, setCurrentCol] = useState(null);
+  // const [currentNum, setCurrentNum] = useState(null);
   const [rowBlock, setRowBlock] = useState(null);
   const [colBlock, setColBlock] = useState(null);
 
@@ -67,12 +67,13 @@ const SudokuGrid = (props) => {
     if (middleRowBlock) rowBlockIndex = [blockNum - 1, blockNum + 1];
     if (rightBlock) rowBlockIndex = [blockNum - 1, blockNum - 2];
 
-    setCurrentBlock(blockNum);
-    setCurrentRow(rowNum);
-    setCurrentCol(columnNum);
+    dispatch({
+      type: "setHighlights",
+      data: [blockNum, rowNum, columnNum, currentNumber],
+    });
+
     setRowBlock(rowBlockIndex);
     setColBlock(columnBlockIndex);
-    setCurrentNum(currentNumber);
   };
 
   // min is 320 px
@@ -105,12 +106,7 @@ const SudokuGrid = (props) => {
       {state?.puzzle?.map((block, i) => (
         <SudokuBlock
           completeBlock={props.data?.complete[i]}
-          currentBlock={currentBlock}
-          currentRow={currentRow}
-          currentCol={currentCol}
           rowBlock={rowBlock}
-          currentNum={currentNum}
-          setActiveNum={setCurrentNum}
           colBlock={colBlock}
           key={i}
           block={block}
