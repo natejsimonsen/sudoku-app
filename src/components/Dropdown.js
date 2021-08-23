@@ -2,10 +2,10 @@ import React, { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useUserConfig } from "../context/userConfigContext";
-import colors from "../config/colors";
 
 export default function Dropdown(props) {
-  const { state } = useUserConfig();
+  const { state, dispatch } = useUserConfig();
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -29,30 +29,33 @@ export default function Dropdown(props) {
           className="absolute z-50 right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md focus:outline-none"
         >
           <div className="px-8 pt-2 pb-4 space-y-4 divide-y">
-            {props.keys.map((key) => (
-              <Menu.Item
-                key={key}
-                as="button"
-                onClick={props.onClick.bind(null, key)}
-              >
-                <div className="flex items-center pt-4">
-                  <div
-                    className="w-8 flex items-center justify-center shadow-2xl h-8 mx-4 rounded-full"
-                    style={{
-                      backgroundColor: colors[key].bgColor,
-                    }}
+            {Object.keys(state?.themes).map(
+              (key) =>
+                key !== "default" && (
+                  <Menu.Item
+                    key={key}
+                    as="button"
+                    onClick={() => dispatch({ type: "changeTheme", name: key })}
                   >
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{
-                        backgroundColor: colors[key].color,
-                      }}
-                    />
-                  </div>
-                  {key}
-                </div>
-              </Menu.Item>
-            ))}
+                    <div className="flex items-center pt-4">
+                      <div
+                        className="flex items-center justify-center w-8 h-8 mx-4 rounded-full shadow-2xl"
+                        style={{
+                          backgroundColor: state?.themes[key].bgColor,
+                        }}
+                      >
+                        <div
+                          className="w-4 h-4 rounded-full"
+                          style={{
+                            backgroundColor: state?.themes[key].color,
+                          }}
+                        />
+                      </div>
+                      {key}
+                    </div>
+                  </Menu.Item>
+                )
+            )}
           </div>
         </Menu.Items>
       </Transition>

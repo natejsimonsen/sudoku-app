@@ -9,7 +9,7 @@ import SudokuGrid from "../components/SudokuGrid";
 import SudokuToolbar from "../components/SudokuToolbar";
 
 const IndexPage = () => {
-  const apiUrl = "http://localhost:3000";
+  const apiUrl = "http://localhost:3000/?difficulty=50";
   const { loading, error, data } = useFetch(apiUrl, {}, []);
 
   return (
@@ -24,7 +24,7 @@ const IndexPage = () => {
               <SudokuToolbar />
             </div>
             {process.env.GATSBY_PRODUCTION && (
-              <p className="max-w-lg mx-auto block pt-8">
+              <p className="block max-w-lg pt-8 mx-auto">
                 More Features shall be added, including user options,
                 customizable themes, and difficulty levels, as well as speed
                 improvements in the backend and a mobile version!
@@ -38,3 +38,59 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
+/*         <div
+              style={{ width: 800, height: 800, border: "1px solid black" }}
+              className="grid grid-cols-3 grid-rows-3 mx-auto"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                <div
+                  className="bg-gray-200 grid grid-cols-3 grid-rows-3"
+                  style={{
+                    borderRight: index % 3 < 2 ? "2px solid black" : "none",
+                    borderBottom: index < 6 ? "2px solid black" : "none",
+                  }}
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                    <div
+                      className="items-center justify-center text-3xl font-semibold text-center bg-gray-800"
+                      style={{
+                        outline: "1px solid black",
+                      }}
+                    >
+                      <p>{item}</p>
+                    </div>
+                  ))}
+                </div>
+              ))}
+              <div
+                className="bg-gray-200"
+                style={{ borderBottom: "2px solid black" }}
+              ></div>
+              <div
+                className="bg-gray-200"
+                style={{
+                  borderRight: "2px solid black",
+                  borderBottom: "2px solid black",
+                }}
+              ></div>
+              <div
+                className="bg-gray-200"
+                style={{
+                  borderRight: "2px solid black",
+                  borderBottom: "2px solid black",
+                }}
+              ></div>
+              <div
+                className="bg-gray-200"
+                style={{ borderBottom: "2px solid black" }}
+              ></div>
+              <div
+                style={{ borderRight: "2px solid black" }}
+                className="bg-gray-200"
+              ></div>
+              <div
+                style={{ borderRight: "2px solid black" }}
+                className="bg-gray-200"
+              ></div>
+              <div className="bg-gray-200"></div>
+            </div>*/

@@ -17,6 +17,28 @@ let historyIndex = 0;
 
 const SudokuContext = React.createContext();
 
+function setHighlights(grid) {
+  const [block, row, col, num] = grid;
+  const topBlock = block <= 2;
+  const middleBlock = block > 2 && block < 6;
+  const bottomBlock = block > 5;
+  const leftBlock = block % 3 === 0;
+  const middleRowBlock = block % 3 === 1;
+  const rightBlock = block % 3 === 2;
+
+  let colBlocks = [];
+  let rowBlocks = [];
+
+  if (topBlock) colBlocks = [block + 3, block + 6];
+  if (middleBlock) colBlocks = [block - 3, block + 3];
+  if (bottomBlock) colBlocks = [block - 3, block - 6];
+  if (leftBlock) rowBlocks = [block + 1, block + 2];
+  if (middleRowBlock) rowBlocks = [block - 1, block + 1];
+  if (rightBlock) rowBlocks = [block - 1, block - 2];
+
+  return { block, row, col, num, rowBlocks, colBlocks };
+}
+
 function sudokuReducer(state, action) {
   let newState = _.cloneDeep(state);
   switch (action.type) {
@@ -64,48 +86,143 @@ function sudokuReducer(state, action) {
       };
       break;
     case "undo":
-      historyIndex--;
       if (historyIndex >= 0) {
-        const [grid, data] = newState.history[historyIndex];
-        const [block, row, col] = grid;
-        if (data === 0) historyIndex--;
-        newState.puzzle[block][row][col] = data;
-        console.log(grid, data);
+        const [grid, { from }] = newState.history[historyIndex];
+        const { block, row, col, num, rowBlocks, colBlocks } = setHighlights([
+          ...grid,
+          from,
+        ]);
+        historyIndex--;
+
+        newState.puzzle[block][row][col] = num;
         newState.currentBlock = block;
         newState.currentRow = row;
         newState.currentCol = col;
-        newState.currentNum = data.number || data;
+        newState.currentNum = num.number || num;
+        newState.rowBlock = rowBlocks;
+        newState.colBlock = colBlocks;
       }
       break;
     case "redo":
-      if (historyIndex < newState.history.length) {
+      if (historyIndex + 1 < newState.history.length) {
         historyIndex++;
-        if (newState.history.length !== historyIndex) {
-          const [grid, data] = newState.history[historyIndex];
-          const [block, row, col] = grid;
-          newState.puzzle[block][row][col] = data;
-          newState.currentBlock = block;
-          newState.currentRow = row;
-          newState.currentCol = col;
-          newState.currentNum = data;
-        }
+        const [grid, { to }] = newState.history[historyIndex];
+        const { block, row, col, num, rowBlocks, colBlocks } = setHighlights([
+          ...grid,
+          to,
+        ]);
+
+        newState.puzzle[block][row][col] = num;
+        newState.currentBlock = block;
+        newState.currentRow = row;
+        newState.currentCol = col;
+        newState.currentNum = num.number || num;
+        newState.rowBlock = rowBlocks;
+        newState.colBlock = colBlocks;
       }
       break;
     case "setHistory":
+      if (historyIndex < newState.history.length) {
+        newState.history.splice(
+          historyIndex + 1,
+          newState.history.length - historyIndex - 1
+        );
+      }
       newState.history.push([
         action.grid,
-        typeof action.data !== "undefined"
-          ? action.data
-          : newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]],
+        {
+          from: action.data,
+          to: newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]],
+        },
       ]);
+
       historyIndex = newState.history.length - 1;
       break;
     case "setHighlights":
-      const [block, row, col, num] = action.data;
+      const { block, row, col, num, rowBlocks, colBlocks } = setHighlights(
+        action.grid
+      );
+
       newState.currentBlock = block;
       newState.currentRow = row;
       newState.currentCol = col;
       newState.currentNum = num;
+      newState.rowBlock = rowBlocks;
+      newState.colBlock = colBlocks;
+
+      break;
+    case "moveGrid":
+      const { currentBlock, currentCol, currentRow } = newState;
+      let newBlock = currentBlock;
+      let newRow = currentRow;
+      let newCol = currentCol;
+      if (action.key === "ArrowRight") {
+        if (currentCol === 2 && currentBlock % 3 === 2) {
+          newCol = 0;
+          newBlock = currentBlock - 2;
+        } else if (currentCol === 2) {
+          newCol = 0;
+          newBlock = currentBlock + 1;
+        } else {
+          newCol = currentCol + 1;
+        }
+      }
+      if (action.key === "ArrowLeft") {
+        if (currentBlock % 3 === 0 && currentCol === 0) {
+          newBlock = currentBlock + 2;
+          newCol = 2;
+        } else if (currentCol === 0) {
+          newCol = 2;
+          newBlock = currentBlock - 1;
+        } else {
+          newCol = currentCol - 1;
+        }
+      }
+      if (action.key === "ArrowDown") {
+        if (currentRow === 2 && currentBlock > 5) {
+          newRow = 0;
+          newBlock = currentBlock - 6;
+        } else if (currentRow === 2) {
+          newRow = 0;
+          newBlock = currentBlock + 3;
+        } else {
+          newRow = currentRow + 1;
+        }
+      }
+      if (action.key === "ArrowUp") {
+        if (currentRow === 0 && currentBlock < 3) {
+          newRow = 2;
+          newBlock = currentBlock + 6;
+        } else if (currentRow === 0) {
+          newRow = 2;
+          newBlock = currentBlock - 3;
+        } else {
+          newRow = currentRow - 1;
+        }
+      }
+
+      // for some reason says block is already defined so rename variables
+      const {
+        block: b,
+        row: ro,
+        col: co,
+        num: n,
+        rowBlocks: r,
+        colBlocks: c,
+      } = setHighlights([
+        newBlock,
+        newRow,
+        newCol,
+        newState.puzzle[newBlock][newRow][newCol],
+      ]);
+
+      newState.currentBlock = b;
+      newState.currentRow = ro;
+      newState.currentCol = co;
+      newState.currentNum = n.number || n;
+      newState.rowBlock = r;
+      newState.colBlock = c;
+
       break;
     default:
       throw new Error(

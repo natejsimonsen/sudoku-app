@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useUserConfig } from "../context/userConfigContext";
 import { useSudoku } from "../context/sudokuContext";
 import _ from "lodash";
@@ -23,12 +23,12 @@ const SudokuCell = ({ i, x, ...props }) => {
       if (!state?.notes) {
         if (!Number.isNaN(key) && key > 0) {
           newState = key;
-          dispatch({ type: "setHighlights", data: [block, row, col, key] });
+          dispatch({ type: "setHighlights", grid: [block, row, col, key] });
         } else if (key === "Backspace" || key === "Delete") {
           newState = 0;
           dispatch({
             type: "setHighlights",
-            data: [block, row, col, newState],
+            grid: [block, row, col, newState],
           });
         }
 
@@ -80,19 +80,23 @@ const SudokuCell = ({ i, x, ...props }) => {
             grid: [block, row, col],
           });
 
-        dispatch({ type: "setHighlights", data: [block, row, col, 0] });
+        dispatch({ type: "setHighlights", grid: [block, row, col, 0] });
       }
 
-      if (props.number === 0) {
-        dispatch({
-          type: "setHistory",
-          data: 0,
-          grid: [block, row, col],
-        });
-      }
+      // if (props.number === 0) {
+      //   dispatch({
+      //     type: "setHistory",
+      //     data: 0,
+      //     grid: [block, row, col],
+      //   });
+      // }
 
       dispatch({
         type: "setHistory",
+        data:
+          props.number && Number.isFinite(props.number)
+            ? { number: props.number }
+            : props.number,
         grid: [block, row, col],
       });
     }
@@ -116,13 +120,13 @@ const SudokuCell = ({ i, x, ...props }) => {
   } else if (sudokuState.currentBlock === block && state?.highlightBlocks) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.colBlock?.includes(block) &&
+    sudokuState.colBlock?.includes(block) &&
     sudokuState.currentCol === col &&
     state?.highlightCols
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.rowBlock?.includes(block) &&
+    sudokuState.rowBlock?.includes(block) &&
     sudokuState.currentRow === row &&
     state?.highlightRows
   ) {
@@ -148,18 +152,14 @@ const SudokuCell = ({ i, x, ...props }) => {
     backgroundColor = state?.theme.highlightBgColor;
   }
 
-  const borderStyle = {
-    borderRight: `1px solid ${state?.theme.borderColor}`,
-    borderBottom: `1px solid ${state?.theme.borderColor}`,
-  };
-  if (row === 0 && block < 3)
-    borderStyle.borderTop = `1px solid ${state?.theme.borderColor}`;
-  if (row === 0 && block >= 3)
-    borderStyle.borderTop = `1px solid ${state?.theme.boldBorderColor}`;
-  if (col === 0 && block % 3 === 0)
-    borderStyle.borderLeft = `1px solid ${state?.theme.borderColor}`;
-  if (col === 0 && block % 3 !== 0) {
-    borderStyle.borderLeft = `1px solid ${state?.theme.boldBorderColor}`;
+  const borderStyle = {};
+
+  if (i % 3 < 2) {
+    borderStyle.borderRight = `1px solid ${state?.theme.borderColor}`;
+  }
+
+  if (i < 6) {
+    borderStyle.borderBottom = `1px solid ${state?.theme.borderColor}`;
   }
 
   const normalModeClass =
@@ -176,8 +176,7 @@ const SudokuCell = ({ i, x, ...props }) => {
         fontSize: !Array.isArray(props.number) ? x / 14 : x / 42,
         height: x / 9,
         width: x / 9,
-        outline: "none",
-        ...borderStyle,
+        outline: `1px solid ${state?.theme.borderColor}`,
         backgroundColor,
         color: !Array.isArray(props.number)
           ? sudokuNumberColor

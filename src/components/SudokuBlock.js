@@ -1,16 +1,33 @@
 import React from "react";
 import SudokuCell from "./SudokuCell";
 import SudokuLockedCell from "./SudokuLockedCell";
+import { useUserConfig } from "../context/userConfigContext";
 
 const SudokuBlock = (props) => {
+  const { state } = useUserConfig();
+  const block = props.i;
+  const borderStyle = { borderRight: null, borderBottom: null };
+
+  if (block % 3 < 2) {
+    borderStyle.borderRight = `2px solid ${state?.theme.boldBorderColor}`;
+  }
+
+  if (block < 6) {
+    borderStyle.borderBottom = `2px solid ${state?.theme.boldBorderColor}`;
+  }
+
   return (
-    <div className="shadow-lg sudoku-block" data-block={props.i}>
-      <div className="flex items-center justify-center grid grid-cols-3 grid-rows-3">
+    <div
+      className="overflow-hidden outline-none shadow-lg sudoku-block"
+      data-block={props.i}
+      style={{
+        ...borderStyle,
+      }}
+    >
+      <div className="flex items-center justify-center outline-none grid grid-cols-3 grid-rows-3">
         {props.dumb
           ? props.block.map((item, i) => (
               <SudokuLockedCell
-                rowBlock={props.rowBlock}
-                colBlock={props.colBlock}
                 block={props.i}
                 i={i}
                 number={item}
@@ -24,8 +41,6 @@ const SudokuBlock = (props) => {
                 typeof item === "object" || item === 0 ? (
                   <SudokuCell
                     correctNumber={props.completeBlock.flat()[i]}
-                    rowBlock={props.rowBlock}
-                    colBlock={props.colBlock}
                     block={props.i}
                     i={i}
                     number={item.number || item}
@@ -34,8 +49,6 @@ const SudokuBlock = (props) => {
                   />
                 ) : (
                   <SudokuLockedCell
-                    rowBlock={props.rowBlock}
-                    colBlock={props.colBlock}
                     block={props.i}
                     i={i}
                     number={item}

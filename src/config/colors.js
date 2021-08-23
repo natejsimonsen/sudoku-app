@@ -35,8 +35,20 @@ const colors = {
     errorColor: "#cc241d",
     userSudokuNumColor: "#83a598",
   },
+  Crisp: {
+    color: "#bdc8c9",
+    navBgColor: "#68829E",
+    bgColor: "#505160",
+    borderColor: "#90AFC5",
+    boldBorderColor: "#429bb8",
+    highlightBgColor: "#515b70",
+    darkerHighlightBg: "#336B87",
+    successColor: "#8ec07c",
+    errorColor: "#913f3f",
+    userSudokuNumColor: "#83a598",
+  },
 };
 
-colors.default = colors["Simple Light"];
+colors.default = colors["Gruvbox"];
 
 export default colors;

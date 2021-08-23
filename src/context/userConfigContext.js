@@ -1,8 +1,11 @@
 import React, { useContext, useReducer } from "react";
 import colors from "../config/colors";
+import _ from "lodash";
 
-const userSettings =
-  typeof localStorage !== "undefined" && localStorage.getItem("settings");
+let userSettings;
+
+// const userSettings =
+//   typeof localStorage !== "undefined" && localStorage.getItem("settings");
 
 let config;
 
@@ -13,6 +16,7 @@ const defaultConfig = {
   highlightRows: true,
   highlightCols: true,
   highlightSameNumbers: true,
+  themes: _.cloneDeep(colors),
   theme: colors.default,
 };
 
@@ -28,7 +32,13 @@ const userConfigReducer = (state, action) => {
   let settings;
   switch (action.type) {
     case "changeTheme":
-      settings = { ...state, theme: action.theme };
+      settings = { ...state, theme: state.themes[action.name] };
+      break;
+    case "addTheme":
+      settings = {
+        ...state,
+        themes: { ...state.themes, [action.name]: action.theme },
+      };
       break;
     case "toggleNotes":
       settings = { ...state, notes: !state.notes };
@@ -59,8 +69,8 @@ const userConfigReducer = (state, action) => {
         `There is no action with type of ${action.type} in userConfigReducer, please specify a valid option`
       );
   }
-  typeof localStorage !== "undefined" &&
-    localStorage.setItem("settings", JSON.stringify(settings));
+  // typeof localStorage !== "undefined" &&
+  //   localStorage.setItem("settings", JSON.stringify(settings));
   return settings;
 };
 

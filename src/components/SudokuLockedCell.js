@@ -29,13 +29,13 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.colBlock?.includes(props.block) &&
+    sudokuState.colBlock?.includes(props.block) &&
     sudokuState.currentCol === col &&
     state?.highlightCols
   ) {
     backgroundColor = state?.theme.highlightBgColor;
   } else if (
-    props.rowBlock?.includes(props.block) &&
+    sudokuState.rowBlock?.includes(props.block) &&
     sudokuState.currentRow === row &&
     state?.highlightRows
   ) {
@@ -61,19 +61,14 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
     backgroundColor = state?.theme.highlightBgColor;
   }
 
-  const borderStyle = {
-    borderRight: `1px solid ${state?.theme.borderColor}`,
-    borderBottom: `1px solid ${state?.theme.borderColor}`,
-  };
+  const borderStyle = {};
 
-  if (row === 0 && props.block < 3)
-    borderStyle.borderTop = `1px solid ${state?.theme.borderColor}`;
-  if (row === 0 && props.block >= 3)
-    borderStyle.borderTop = `1px solid ${state?.theme.boldBorderColor}`;
-  if (col === 0 && props.block % 3 === 0)
-    borderStyle.borderLeft = `1px solid ${state?.theme.borderColor}`;
-  if (col === 0 && props.block % 3 !== 0) {
-    borderStyle.borderLeft = `1px solid ${state?.theme.boldBorderColor}`;
+  if (i % 3 < 2) {
+    borderStyle.borderRight = `1px solid ${state?.theme.borderColor}`;
+  }
+
+  if (i < 6) {
+    borderStyle.borderBottom = `1px solid ${state?.theme.borderColor}`;
   }
 
   return (
@@ -83,7 +78,7 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
         fontSize: x / 14,
         height: x / 9,
         width: x / 9,
-        ...borderStyle,
+        outline: `1px solid ${state?.theme.borderColor}`,
         backgroundColor: backgroundColor,
         color: sudokuNumberColor,
       }}

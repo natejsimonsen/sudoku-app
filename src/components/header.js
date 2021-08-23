@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useUserConfig } from "../context/userConfigContext";
 import { Link } from "gatsby";
-import colors from "../config/colors";
 import Dropdown from "./Dropdown";
 import Modal from "./Modal";
 import Switch from "./Switch";
@@ -35,10 +34,6 @@ const Header = () => {
   const { state, dispatch } = useUserConfig();
   const [open, setOpen] = useState(false);
 
-  const handleClick = (theme) => {
-    dispatch({ type: "changeTheme", theme: colors[theme] });
-  };
-
   return (
     <header
       style={{
@@ -58,10 +53,7 @@ const Header = () => {
           <Link to="/">Sudoku</Link>
         </h1>
         <div className="flex items-center space-x-4">
-          <Dropdown
-            onClick={handleClick}
-            keys={Object.keys(colors).slice(0, -1)}
-          />
+          <Dropdown />
           <CogIcon onClick={setOpen.bind(null, true)} />
           <Modal open={open} setOpen={setOpen}>
             <h2 className="pb-2 text-3xl font-bold">Highlighting</h2>
