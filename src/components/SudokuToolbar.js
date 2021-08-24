@@ -21,7 +21,15 @@ const SudokuToolbar = (props) => {
   }, []);
 
   return (
-    <div className="pb-0 mx-auto mb-0">
+    <div
+      role="menu"
+      onClick={() => {
+        sudokuDispatch({
+          type: "enableHighlights",
+        });
+      }}
+      className="sudoku-toolbar pb-0 mx-auto mb-0"
+    >
       <div className="mb-6 space-x-5" ref={ref}>
         <button
           onClick={dispatch.bind(null, { type: "toggleNotes" })}
@@ -92,7 +100,7 @@ const SudokuToolbar = (props) => {
         {numbers.map((number) => (
           <button
             key={number}
-            className="font-semibold outline-none hover:opacity-75 hover:opacity-75"
+            className="font-semibold outline-none hover:opacity-75"
             style={{
               backgroundColor: userState?.theme.highlightBgColor,
               height,

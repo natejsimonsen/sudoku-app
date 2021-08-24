@@ -79,7 +79,9 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
         height: x / 9,
         width: x / 9,
         outline: `1px solid ${state?.theme.borderColor}`,
-        backgroundColor: backgroundColor,
+        backgroundColor: sudokuState.disableHighlights
+          ? state?.theme.bgColor
+          : backgroundColor,
         color: sudokuNumberColor,
       }}
       data-row={Math.floor(i / 3)}

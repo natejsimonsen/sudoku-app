@@ -4,6 +4,7 @@ import { useSudoku } from "../context/sudokuContext";
 import { useUserConfig } from "../context/userConfigContext";
 import { useKey } from "react-use";
 import _ from "lodash";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 const SudokuGrid = (props) => {
   const [state, dispatch] = useSudoku();
@@ -25,6 +26,8 @@ const SudokuGrid = (props) => {
     "ArrowDown",
     "ArrowLeft",
     "ArrowRight",
+    "Tab",
+    "Enter",
     "w",
     "a",
     "s",
@@ -36,11 +39,12 @@ const SudokuGrid = (props) => {
   ];
 
   const keyPressHandler = (event) => {
+    if (state.disableHighlights) return;
     event.preventDefault();
     if (Number.isFinite(+event.key)) {
       dispatch({ type: "changeNum", data: +event.key });
     } else if (event.key === "Backspace" || event.key === "Delete") {
-      dispatch({ type: "changeNum", data: event.key });
+      dispatch({ type: "changeNum", data: event.key, delete: true });
     } else {
       dispatch({ type: "moveGrid", key: event.key });
     }
@@ -61,6 +65,7 @@ const SudokuGrid = (props) => {
     const currentNum = +sudokuCell.dataset.number;
     const blockNum = +block.dataset.block;
 
+    dispatch({ type: "enableHighlights" });
     dispatch({
       type: "setHighlights",
       grid: [blockNum, rowNum, columnNum, currentNum],
@@ -77,38 +82,45 @@ const SudokuGrid = (props) => {
     dispatch({ type: "initialize", data: originalData });
   }, [props.loading]);
 
+  const handleClickAway = (e) => {
+    if (e.target.closest(".sudoku-toolbar")) return;
+    dispatch({ type: "disableHighlights" });
+  };
+
   return (
-    <section
-      className="grid grid-cols-3 grid-rows-3"
-      style={{
-        border: `1px solid ${themeState?.theme.borderColor}`,
-        boxSizing: "content-box",
-        width: sudokuGridWidth,
-        height: sudokuGridWidth,
-      }}
-      onMouseDown={handleBlockClick}
-      id="sudokuGrid"
-    >
-      {(!state || !state.puzzle || state?.puzzle?.length === 0) &&
-        [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, i) => (
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <section
+        className="grid grid-cols-3 grid-rows-3"
+        style={{
+          border: `1px solid ${themeState?.theme.borderColor}`,
+          boxSizing: "content-box",
+          width: sudokuGridWidth,
+          height: sudokuGridWidth,
+        }}
+        onMouseDown={handleBlockClick}
+        id="sudokuGrid"
+      >
+        {(!state || !state.puzzle || state?.puzzle?.length === 0) &&
+          [1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, i) => (
+            <SudokuBlock
+              dumb
+              x={sudokuGridWidth}
+              key={item}
+              i={i}
+              block={[0, 0, 0, 0, 0, 0, 0, 0, 0]}
+            />
+          ))}
+        {state?.puzzle?.map((block, i) => (
           <SudokuBlock
-            dumb
+            completeBlock={props.data?.complete[i]}
+            key={i}
+            block={block}
             x={sudokuGridWidth}
-            key={item}
             i={i}
-            block={[0, 0, 0, 0, 0, 0, 0, 0, 0]}
           />
         ))}
-      {state?.puzzle?.map((block, i) => (
-        <SudokuBlock
-          completeBlock={props.data?.complete[i]}
-          key={i}
-          block={block}
-          x={sudokuGridWidth}
-          i={i}
-        />
-      ))}
-    </section>
+      </section>
+    </ClickAwayListener>
   );
 };
 

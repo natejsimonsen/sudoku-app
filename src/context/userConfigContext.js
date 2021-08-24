@@ -18,6 +18,7 @@ const defaultConfig = {
   highlightSameNumbers: true,
   themes: _.cloneDeep(colors),
   theme: colors.default,
+  disableClick: false,
 };
 
 if (userSettings) {

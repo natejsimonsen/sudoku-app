@@ -5,11 +5,11 @@ const defaultSudokuGrid = {
   puzzle: [],
   complete: [],
   history: [],
-  currentNumber: 0,
-  activeBlock: null,
-  activeCol: null,
-  activeRow: null,
-  activeNum: null,
+  currentNum: 0,
+  currentBlock: undefined,
+  currentRow: undefined,
+  currentCol: undefined,
+  disableHighlights: false,
   keyHit: false,
 };
 
@@ -66,22 +66,25 @@ function sudokuReducer(state, action) {
           .sort()
           .concat(action.data);
       break;
-    case "backspace":
+    case "removeNoteEnd":
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] =
         newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]]
           .sort()
           .slice(0, -1);
       break;
-    case "delete":
+    case "removeNoteStart":
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] =
         newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]]
           .sort()
           .slice(1);
       break;
+    case "removeNum":
+      newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] = 0;
+      break;
     case "changeNum":
       newState = {
         ...newState,
-        currentNumber: action.data,
+        currentNum: action.data,
         keyHit: !newState.keyHit,
       };
       break;
@@ -153,76 +156,101 @@ function sudokuReducer(state, action) {
       break;
     case "moveGrid":
       const { currentBlock, currentCol, currentRow } = newState;
-      let newBlock = currentBlock;
-      let newRow = currentRow;
-      let newCol = currentCol;
-      if (action.key === "ArrowRight") {
-        if (currentCol === 2 && currentBlock % 3 === 2) {
-          newCol = 0;
-          newBlock = currentBlock - 2;
-        } else if (currentCol === 2) {
-          newCol = 0;
-          newBlock = currentBlock + 1;
-        } else {
-          newCol = currentCol + 1;
+      if (typeof currentBlock !== "undefined") {
+        let newBlock = currentBlock;
+        let newRow = currentRow;
+        let newCol = currentCol;
+        if (
+          action.key === "ArrowRight" ||
+          action.key === "D" ||
+          action.key === "d" ||
+          action.key === "Tab"
+        ) {
+          if (currentCol === 2 && currentBlock % 3 === 2) {
+            newCol = 0;
+            newBlock = currentBlock - 2;
+          } else if (currentCol === 2) {
+            newCol = 0;
+            newBlock = currentBlock + 1;
+          } else {
+            newCol = currentCol + 1;
+          }
         }
-      }
-      if (action.key === "ArrowLeft") {
-        if (currentBlock % 3 === 0 && currentCol === 0) {
-          newBlock = currentBlock + 2;
-          newCol = 2;
-        } else if (currentCol === 0) {
-          newCol = 2;
-          newBlock = currentBlock - 1;
-        } else {
-          newCol = currentCol - 1;
+        if (
+          action.key === "ArrowLeft" ||
+          action.key === "A" ||
+          action.key === "a"
+        ) {
+          if (currentBlock % 3 === 0 && currentCol === 0) {
+            newBlock = currentBlock + 2;
+            newCol = 2;
+          } else if (currentCol === 0) {
+            newCol = 2;
+            newBlock = currentBlock - 1;
+          } else {
+            newCol = currentCol - 1;
+          }
         }
-      }
-      if (action.key === "ArrowDown") {
-        if (currentRow === 2 && currentBlock > 5) {
-          newRow = 0;
-          newBlock = currentBlock - 6;
-        } else if (currentRow === 2) {
-          newRow = 0;
-          newBlock = currentBlock + 3;
-        } else {
-          newRow = currentRow + 1;
+        if (
+          action.key === "ArrowDown" ||
+          action.key === "S" ||
+          action.key === "s" ||
+          action.key === "Enter"
+        ) {
+          if (currentRow === 2 && currentBlock > 5) {
+            newRow = 0;
+            newBlock = currentBlock - 6;
+          } else if (currentRow === 2) {
+            newRow = 0;
+            newBlock = currentBlock + 3;
+          } else {
+            newRow = currentRow + 1;
+          }
         }
-      }
-      if (action.key === "ArrowUp") {
-        if (currentRow === 0 && currentBlock < 3) {
-          newRow = 2;
-          newBlock = currentBlock + 6;
-        } else if (currentRow === 0) {
-          newRow = 2;
-          newBlock = currentBlock - 3;
-        } else {
-          newRow = currentRow - 1;
+        if (
+          action.key === "ArrowUp" ||
+          action.key === "W" ||
+          action.key === "w"
+        ) {
+          if (currentRow === 0 && currentBlock < 3) {
+            newRow = 2;
+            newBlock = currentBlock + 6;
+          } else if (currentRow === 0) {
+            newRow = 2;
+            newBlock = currentBlock - 3;
+          } else {
+            newRow = currentRow - 1;
+          }
         }
-      }
 
-      // for some reason says block is already defined so rename variables
-      const {
-        block: b,
-        row: ro,
-        col: co,
-        num: n,
-        rowBlocks: r,
-        colBlocks: c,
-      } = setHighlights([
-        newBlock,
-        newRow,
-        newCol,
-        newState.puzzle[newBlock][newRow][newCol],
-      ]);
+        // for some reason says block is already defined so rename variables
+        const {
+          block: b,
+          row: ro,
+          col: co,
+          num: n,
+          rowBlocks: r,
+          colBlocks: c,
+        } = setHighlights([
+          newBlock,
+          newRow,
+          newCol,
+          newState.puzzle[newBlock][newRow][newCol],
+        ]);
 
-      newState.currentBlock = b;
-      newState.currentRow = ro;
-      newState.currentCol = co;
-      newState.currentNum = n.number || n;
-      newState.rowBlock = r;
-      newState.colBlock = c;
-
+        newState.currentBlock = b;
+        newState.currentRow = ro;
+        newState.currentCol = co;
+        newState.currentNum = n.number || n;
+        newState.rowBlock = r;
+        newState.colBlock = c;
+      }
+      break;
+    case "disableHighlights":
+      newState.disableHighlights = true;
+      break;
+    case "enableHighlights":
+      newState.disableHighlights = false;
       break;
     default:
       throw new Error(

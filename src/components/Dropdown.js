@@ -9,8 +9,8 @@ export default function Dropdown(props) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium border border-gray-300 rounded-md shadow-sm">
-          Options
+        <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium">
+          Schemes
           <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
         </Menu.Button>
       </div>

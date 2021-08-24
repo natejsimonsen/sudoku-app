@@ -35,28 +35,32 @@ const SudokuBlock = (props) => {
                 key={i}
               />
             ))
-          : props.block
-              .flat()
-              .map((item, i) =>
-                typeof item === "object" || item === 0 ? (
-                  <SudokuCell
-                    correctNumber={props.completeBlock.flat()[i]}
-                    block={props.i}
-                    i={i}
-                    number={item.number || item}
-                    x={props.x}
-                    key={i}
-                  />
-                ) : (
-                  <SudokuLockedCell
-                    block={props.i}
-                    i={i}
-                    number={item}
-                    x={props.x}
-                    key={i}
-                  />
-                )
-              )}
+          : props.block.flat().map((item, i) =>
+              typeof item === "object" || item === 0 ? (
+                <SudokuCell
+                  correctNumber={props.completeBlock.flat()[i]}
+                  block={props.i}
+                  i={i}
+                  number={item.number || item}
+                  numsExclude={props.block
+                    .flat()
+                    .filter(
+                      (num) => !Array.isArray(num) && typeof num === "object"
+                    )
+                    .map((num) => num.number)}
+                  x={props.x}
+                  key={i}
+                />
+              ) : (
+                <SudokuLockedCell
+                  block={props.i}
+                  i={i}
+                  number={item}
+                  x={props.x}
+                  key={i}
+                />
+              )
+            )}
       </div>
     </div>
   );
