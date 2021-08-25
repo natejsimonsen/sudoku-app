@@ -9,7 +9,9 @@ import SudokuGrid from "../components/SudokuGrid";
 import SudokuToolbar from "../components/SudokuToolbar";
 
 const IndexPage = () => {
-  const apiUrl = "http://localhost:3000/?difficulty=50";
+  const apiUrl = process.env.GATSBY_PRODUCTION
+    ? "https://sudoku-generator-api.herokuapp.com/?difficulty=50"
+    : "http://localhost:3000/?difficulty=50";
   const { loading, error, data } = useFetch(apiUrl, {}, []);
 
   return (
