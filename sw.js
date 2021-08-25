@@ -27,20 +27,20 @@ workbox.core.clientsClaim();
  */
 self.__precacheManifest = [
   {
-    "url": "webpack-runtime-548be0e107cb49d18fca.js"
+    "url": "webpack-runtime-9f486566b2cb8aca5f07.js"
   },
   {
     "url": "framework-b657a1ac3cb1891928a7.js"
   },
   {
-    "url": "styles.d31e8a89e4e3c7cf126f.css"
+    "url": "styles.494ecbb85fe0fdd6e279.css"
   },
   {
-    "url": "app-72579892358753b3725a.js"
+    "url": "app-71462e27e2060f32d3a9.js"
   },
   {
     "url": "offline-plugin-app-shell-fallback/index.html",
-    "revision": "f576e249e51c06246f19204ede623261"
+    "revision": "bf08420f36f473d7234e59a841b44da7"
   },
   {
     "url": "static/webfonts/s/opensans/v23/mem5YaGs126MiZpBA-UN_r8OUuhp.woff2"
@@ -49,22 +49,23 @@ self.__precacheManifest = [
     "url": "static/webfonts/s/opensans/v23/mem8YaGs126MiZpBA-UFVZ0b.woff2"
   },
   {
+    "url": "static/webfonts/s/opensans/v23/mem5YaGs126MiZpBA-UNirkOUuhp.woff2"
+  },
+  {
+    "url": "static/webfonts/s/opensans/v23/mem5YaGs126MiZpBA-UN7rgOUuhp.woff2"
+  },
+  {
+    "url": "static/webfonts/s/opensans/v23/mem5YaGs126MiZpBA-UN8rsOUuhp.woff2"
+  },
+  {
     "url": "component---cache-caches-gatsby-plugin-offline-app-shell-js-504f688893251871c6ae.js"
-  },
-  {
-    "url": "page-data/offline-plugin-app-shell-fallback/page-data.json",
-    "revision": "f6081b83111aea4128c98944b7fafccc"
-  },
-  {
-    "url": "page-data/app-data.json",
-    "revision": "696cf35351e8bc0bdd8bef026cf722e0"
   },
   {
     "url": "polyfill-1068b70223fc31039b50.js"
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "cbfa7ecfad7352b31d680f605f0e14cd"
+    "revision": "57b902d9949464ffd8c5a1824d316b48"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
@@ -151,12 +152,12 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
   lastNavigationRequest = event.request.url
 
   let { pathname } = new URL(event.request.url)
-  pathname = pathname.replace(new RegExp(`^/sudoku-app`), ``)
+  pathname = pathname.replace(new RegExp(`^`), ``)
 
   // Check for resources + the app bundle
   // The latter may not exist if the SW is updating to a new version
   const resources = await idbKeyval.get(`resources:${pathname}`)
-  if (!resources || !(await caches.match(`/sudoku-app/app-72579892358753b3725a.js`))) {
+  if (!resources || !(await caches.match(`/app-71462e27e2060f32d3a9.js`))) {
     return await fetch(event.request)
   }
 
@@ -169,7 +170,7 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
     }
   }
 
-  const offlineShell = `/sudoku-app/offline-plugin-app-shell-fallback/index.html`
+  const offlineShell = `/offline-plugin-app-shell-fallback/index.html`
   const offlineShellWithKey = workbox.precaching.getCacheKeyForURL(offlineShell)
   return await caches.match(offlineShellWithKey)
 })
