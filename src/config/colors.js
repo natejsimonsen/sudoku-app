@@ -35,17 +35,17 @@ const colors = {
     errorColor: "#cc241d",
     userSudokuNumColor: "#83a598",
   },
-  Crisp: {
-    color: "#bdc8c9",
-    navBgColor: "#68829E",
-    bgColor: "#505160",
-    borderColor: "#90AFC5",
-    boldBorderColor: "#429bb8",
-    highlightBgColor: "#515b70",
-    darkerHighlightBg: "#336B87",
-    successColor: "#8ec07c",
-    errorColor: "#913f3f",
-    userSudokuNumColor: "#83a598",
+  Desert: {
+    bgColor: "#fdf6e3",
+    boldBorderColor: "#d33682",
+    borderColor: "#002b36",
+    color: "#657b83",
+    darkerHighlightBg: "#d1ccbc",
+    errorColor: "#cc241d",
+    highlightBgColor: "#eee8d5",
+    navBgColor: "#c9c2a9",
+    successColor: "#859900",
+    userSudokuNumColor: "#2aa198",
   },
 };
 

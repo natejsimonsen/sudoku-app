@@ -1,17 +1,12 @@
 import React, { Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import { useUserConfig } from "../context/userConfigContext";
 
 export default function Modal({ open, setOpen, children }) {
   const { state } = useUserConfig();
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        auto-reopen="true"
-        className="fixed z-10 inset-0 overflow-y-auto"
-        onClose={setOpen}
-      >
+      <div className="fixed z-10 inset-0 overflow-y-auto">
         <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
@@ -22,12 +17,13 @@ export default function Modal({ open, setOpen, children }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay
+            <div
               style={{
                 backgroundColor: state?.theme.navBgColor,
                 opacity: "75%",
               }}
               className="fixed inset-0 transition-opacity"
+              onClick={() => setOpen(false)}
             />
           </Transition.Child>
 
@@ -69,7 +65,7 @@ export default function Modal({ open, setOpen, children }) {
             </div>
           </Transition.Child>
         </div>
-      </Dialog>
+      </div>
     </Transition.Root>
   );
 }

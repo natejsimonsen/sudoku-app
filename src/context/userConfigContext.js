@@ -70,8 +70,8 @@ const userConfigReducer = (state, action) => {
         `There is no action with type of ${action.type} in userConfigReducer, please specify a valid option`
       );
   }
-  // typeof localStorage !== "undefined" &&
-  //   localStorage.setItem("settings", JSON.stringify(settings));
+  typeof localStorage !== "undefined" &&
+    localStorage.setItem("settings", JSON.stringify(settings));
   return settings;
 };
 

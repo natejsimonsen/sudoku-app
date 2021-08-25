@@ -10,8 +10,8 @@ import SudokuToolbar from "../components/SudokuToolbar";
 
 const IndexPage = () => {
   const apiUrl = process.env.GATSBY_PRODUCTION
-    ? "https://sudoku-generator-api.herokuapp.com/?difficulty=50"
-    : "http://localhost:3000/?difficulty=50";
+    ? "https://sudoku-generator-api.herokuapp.com/?difficulty=55"
+    : "http://localhost:3000/?difficulty=55";
   const { loading, error, data } = useFetch(apiUrl, {}, []);
 
   return (
@@ -40,59 +40,3 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
-/*         <div
-              style={{ width: 800, height: 800, border: "1px solid black" }}
-              className="grid grid-cols-3 grid-rows-3 mx-auto"
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-                <div
-                  className="bg-gray-200 grid grid-cols-3 grid-rows-3"
-                  style={{
-                    borderRight: index % 3 < 2 ? "2px solid black" : "none",
-                    borderBottom: index < 6 ? "2px solid black" : "none",
-                  }}
-                >
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
-                    <div
-                      className="items-center justify-center text-3xl font-semibold text-center bg-gray-800"
-                      style={{
-                        outline: "1px solid black",
-                      }}
-                    >
-                      <p>{item}</p>
-                    </div>
-                  ))}
-                </div>
-              ))}
-              <div
-                className="bg-gray-200"
-                style={{ borderBottom: "2px solid black" }}
-              ></div>
-              <div
-                className="bg-gray-200"
-                style={{
-                  borderRight: "2px solid black",
-                  borderBottom: "2px solid black",
-                }}
-              ></div>
-              <div
-                className="bg-gray-200"
-                style={{
-                  borderRight: "2px solid black",
-                  borderBottom: "2px solid black",
-                }}
-              ></div>
-              <div
-                className="bg-gray-200"
-                style={{ borderBottom: "2px solid black" }}
-              ></div>
-              <div
-                style={{ borderRight: "2px solid black" }}
-                className="bg-gray-200"
-              ></div>
-              <div
-                style={{ borderRight: "2px solid black" }}
-                className="bg-gray-200"
-              ></div>
-              <div className="bg-gray-200"></div>
-            </div>*/

@@ -29,33 +29,36 @@ export default function Dropdown(props) {
           className="absolute z-50 right-0 w-56 mt-2 shadow-lg origin-top-right rounded-md focus:outline-none"
         >
           <div className="px-8 pt-2 pb-4 space-y-4 divide-y">
-            {Object.keys(state?.themes).map(
-              (key) =>
-                key !== "default" && (
-                  <Menu.Item
-                    key={key}
-                    as="button"
-                    onClick={() => dispatch({ type: "changeTheme", name: key })}
-                  >
-                    <div className="flex items-center pt-4">
-                      <div
-                        className="flex items-center justify-center w-8 h-8 mx-4 rounded-full shadow-2xl"
-                        style={{
-                          backgroundColor: state?.themes[key].bgColor,
-                        }}
-                      >
+            {state?.themes &&
+              Object.keys(state?.themes).map(
+                (key) =>
+                  key !== "default" && (
+                    <Menu.Item
+                      key={key}
+                      as="button"
+                      onClick={() =>
+                        dispatch({ type: "changeTheme", name: key })
+                      }
+                    >
+                      <div className="flex items-center pt-4">
                         <div
-                          className="w-4 h-4 rounded-full"
+                          className="flex items-center justify-center w-8 h-8 mx-4 rounded-full shadow-2xl"
                           style={{
-                            backgroundColor: state?.themes[key].color,
+                            backgroundColor: state?.themes[key].bgColor,
                           }}
-                        />
+                        >
+                          <div
+                            className="w-4 h-4 rounded-full"
+                            style={{
+                              backgroundColor: state?.themes[key].color,
+                            }}
+                          />
+                        </div>
+                        {key}
                       </div>
-                      {key}
-                    </div>
-                  </Menu.Item>
-                )
-            )}
+                    </Menu.Item>
+                  )
+              )}
           </div>
         </Menu.Items>
       </Transition>
