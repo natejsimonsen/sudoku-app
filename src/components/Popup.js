@@ -3,6 +3,7 @@ import Popover from "@material-ui/core/Popover";
 import InfoIcon from "@material-ui/icons/Info";
 
 export default function SimplePopover(props) {
+  const { popUpStyle, ...inputProps } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -17,7 +18,7 @@ export default function SimplePopover(props) {
   const id = open ? "simple-popover" : undefined;
 
   return (
-    <div {...props}>
+    <div {...inputProps}>
       <button aria-describedby={id} onClick={handleClick}>
         <InfoIcon />
       </button>
@@ -35,7 +36,7 @@ export default function SimplePopover(props) {
           horizontal: "center",
         }}
       >
-        <p>The content of the Popover.</p>
+        {props.children}
       </Popover>
     </div>
   );

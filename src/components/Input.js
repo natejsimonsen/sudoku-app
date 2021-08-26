@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import Popup from "./Popup";
 import { Field } from "formik";
+import { useUserConfig } from "../context/userConfigContext";
 
 export default function Input(props) {
+  const { state: userState } = useUserConfig();
   const [focused, setFocused] = useState(false);
   const { id, errors, values, state, touched } = props;
   return (
     <div className="flex flex-col justify-center mx-auto">
       <label htmlFor={id} className="ml-12">
-        {id}
+        {props.name}
       </label>
       <div className="flex items-center">
         <div
@@ -26,7 +28,7 @@ export default function Input(props) {
         >
           <Field
             name={id}
-            className="py-1 px-2 border-2 rounded-md outline-none"
+            className="py-1 px-2 border-2 w-52 rounded-md outline-none"
             style={{
               borderColor: focused ? state?.theme.color : "transparent",
             }}
@@ -38,7 +40,17 @@ export default function Input(props) {
               right: "4px",
               transform: "translateY(-50%)",
             }}
-          />
+          >
+            <div
+              style={{
+                backgroundColor: userState?.theme.navBgColor,
+                color: userState?.theme.color,
+              }}
+              className="px-4 py-2"
+            >
+              <p style={{ maxWidth: 250 }}>{props.description}</p>
+            </div>
+          </Popup>
         </div>
       </div>
       {errors[id] && touched[id] ? (
