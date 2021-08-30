@@ -27,20 +27,20 @@ workbox.core.clientsClaim();
  */
 self.__precacheManifest = [
   {
-    "url": "webpack-runtime-d16c1c646d7e9db1540a.js"
+    "url": "webpack-runtime-e6d6db913b95ea0e3e93.js"
   },
   {
-    "url": "framework-b657a1ac3cb1891928a7.js"
+    "url": "framework-e886f61ee3e03a6355e5.js"
   },
   {
-    "url": "styles.494ecbb85fe0fdd6e279.css"
+    "url": "styles.07141e334484720597b9.css"
   },
   {
-    "url": "app-6d3918323deecb0f05c4.js"
+    "url": "app-71462e27e2060f32d3a9.js"
   },
   {
     "url": "offline-plugin-app-shell-fallback/index.html",
-    "revision": "4e0ab6c7f620d763b8729c961648cbf4"
+    "revision": "079d0ec86ff953fa5ec9a43073d13343"
   },
   {
     "url": "static/webfonts/s/opensans/v23/mem5YaGs126MiZpBA-UN_r8OUuhp.woff2"
@@ -61,19 +61,11 @@ self.__precacheManifest = [
     "url": "component---cache-caches-gatsby-plugin-offline-app-shell-js-504f688893251871c6ae.js"
   },
   {
-    "url": "page-data/offline-plugin-app-shell-fallback/page-data.json",
-    "revision": "f6081b83111aea4128c98944b7fafccc"
-  },
-  {
-    "url": "page-data/app-data.json",
-    "revision": "1306912be02e6cc978451e610113c663"
-  },
-  {
     "url": "polyfill-1068b70223fc31039b50.js"
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "cbfa7ecfad7352b31d680f605f0e14cd"
+    "revision": "57b902d9949464ffd8c5a1824d316b48"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
@@ -160,12 +152,12 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
   lastNavigationRequest = event.request.url
 
   let { pathname } = new URL(event.request.url)
-  pathname = pathname.replace(new RegExp(`^/sudoku-app`), ``)
+  pathname = pathname.replace(new RegExp(`^`), ``)
 
   // Check for resources + the app bundle
   // The latter may not exist if the SW is updating to a new version
   const resources = await idbKeyval.get(`resources:${pathname}`)
-  if (!resources || !(await caches.match(`/sudoku-app/app-6d3918323deecb0f05c4.js`))) {
+  if (!resources || !(await caches.match(`/app-71462e27e2060f32d3a9.js`))) {
     return await fetch(event.request)
   }
 
@@ -178,7 +170,7 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
     }
   }
 
-  const offlineShell = `/sudoku-app/offline-plugin-app-shell-fallback/index.html`
+  const offlineShell = `/offline-plugin-app-shell-fallback/index.html`
   const offlineShellWithKey = workbox.precaching.getCacheKeyForURL(offlineShell)
   return await caches.match(offlineShellWithKey)
 })
