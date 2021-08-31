@@ -3,6 +3,7 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useUserConfig } from "../context/userConfigContext";
 import Input from "./Input";
+import tinycolor from "tinycolor2";
 
 const colorUIMapping = {
   color: {
@@ -56,70 +57,70 @@ const colorSchema = Yup.object().shape({
   color: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   navBgColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   bgColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   borderColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   boldBorderColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   highlightBgColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   darkerHighlightBg: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   successColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   errorColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
   userSudokuNumColor: Yup.string()
     .trim()
     .matches(
-      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))$/gi,
+      /^(#[0-9a-f]{3}|#(?:[0-9a-f]{2}){2,4}|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d.]+%?\))$/gi,
       "Not a valid color"
     )
     .required("Required"),
@@ -161,9 +162,10 @@ export default function ColorForm(props) {
                 <label htmlFor="name">Name</label>
                 <Field
                   name="name"
-                  className="py-1 px-2 border-2 rounded-md outline-none w-64"
+                  className="py-1 px-2 shadow-md border-2 rounded-md outline-none w-64"
                   style={{
                     borderColor: focused ? state?.theme.color : "transparent",
+                    backgroundColor: state?.theme.navBgColor,
                   }}
                 />
               </div>
