@@ -25,6 +25,7 @@ module.exports = {
       },
     },
     `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-material-ui`,
     "gatsby-plugin-postcss",
     `gatsby-plugin-image`,
     {

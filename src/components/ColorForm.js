@@ -3,7 +3,6 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useUserConfig } from "../context/userConfigContext";
 import Input from "./Input";
-import tinycolor from "tinycolor2";
 
 const colorUIMapping = {
   color: {
@@ -134,13 +133,29 @@ export default function ColorForm(props) {
     ...state?.theme,
   };
 
+  // <div className="flex mb-4 space-x-4">
+  //   <div>
+  //     <h2 className="pb-1 cursor-pointer text-3xl font-bold hover:opacity-75">
+  //       Color Builder
+  //     </h2>
+  //     <hr
+  //       className="w-full border-b"
+  //       style={{ borderColor: state?.theme.borderColor }}
+  //     />
+  //   </div>
+  //   <div>
+  //     <h2 className="pb-1 text-3xl cursor-pointer hover:opacity-75 font-bold">
+  //       Theme Picker
+  //     </h2>
+  //     <hr
+  //       className="w-full border-b"
+  //       style={{ borderColor: state?.theme.borderColor }}
+  //     />
+  //   </div>
+  // </div>
+
   return (
     <div>
-      <h2 className="pb-2 text-3xl font-bold">Color Builder</h2>
-      <hr
-        className="w-48 mb-4 border-b"
-        style={{ borderColor: state?.theme.borderColor }}
-      />
       <Formik
         initialValues={initialValues}
         validationSchema={colorSchema}

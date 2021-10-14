@@ -6,7 +6,6 @@ import _ from "lodash";
 const SudokuCell = ({ i, x, ...props }) => {
   const [sudokuState, dispatch] = useSudoku();
   const { state } = useUserConfig();
-  const [excludeNums, setExcludeNums] = React.useState([]);
 
   const row = Math.floor(i / 3);
   const col = i % 3;

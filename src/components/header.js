@@ -6,7 +6,7 @@ import Modal from "./Modal";
 import Switch from "./Switch";
 import PaletteIcon from "@material-ui/icons/Palette";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Form from "./ColorForm";
+import Tabs from "./Tabs";
 
 const Header = () => {
   const { state, dispatch } = useUserConfig();
@@ -42,7 +42,7 @@ const Header = () => {
           </button>
           <Dropdown />
           <Modal open={openColorModal} setOpen={setOpenColorModal}>
-            <Form />
+            <Tabs />
           </Modal>
           <Modal open={open} setOpen={setOpen}>
             <h2 className="pb-2 text-3xl font-bold">Highlighting</h2>

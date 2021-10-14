@@ -12,7 +12,7 @@ const SudokuToolbar = (props) => {
   const { state: userState, dispatch } = useUserConfig();
 
   const [_, sudokuDispatch] = useSudoku();
-  const [height, setHeight] = useState(0);
+  const [height, setHeight] = useState(100);
 
   const ref = useCallback((node) => {
     if (node !== null) {

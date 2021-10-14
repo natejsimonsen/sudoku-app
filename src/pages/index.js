@@ -12,6 +12,7 @@ const IndexPage = () => {
   const apiUrl = process.env.GATSBY_PRODUCTION
     ? "https://sudoku-generator-api.herokuapp.com/?difficulty=55"
     : "http://localhost:3000/?difficulty=55";
+
   const { loading, error, data } = useFetch(apiUrl, {}, []);
 
   return (
