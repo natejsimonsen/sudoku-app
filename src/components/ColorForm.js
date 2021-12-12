@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useUserConfig } from "../context/userConfigContext";
+import ColorBlobs from "./ColorBlobs";
 import Input from "./Input";
 
 const colorUIMapping = {
@@ -125,40 +126,17 @@ const colorSchema = Yup.object().shape({
     .required("Required"),
 });
 
-export default function ColorForm(props) {
+export default function ColorForm() {
   const { state, dispatch } = useUserConfig();
   const [focused, setFocused] = useState(false);
-  const initialValues = {
-    name: "",
-    ...state?.theme,
-  };
-
-  // <div className="flex mb-4 space-x-4">
-  //   <div>
-  //     <h2 className="pb-1 cursor-pointer text-3xl font-bold hover:opacity-75">
-  //       Color Builder
-  //     </h2>
-  //     <hr
-  //       className="w-full border-b"
-  //       style={{ borderColor: state?.theme.borderColor }}
-  //     />
-  //   </div>
-  //   <div>
-  //     <h2 className="pb-1 text-3xl cursor-pointer hover:opacity-75 font-bold">
-  //       Theme Picker
-  //     </h2>
-  //     <hr
-  //       className="w-full border-b"
-  //       style={{ borderColor: state?.theme.borderColor }}
-  //     />
-  //   </div>
-  // </div>
 
   return (
-    <div>
+    <div className="pt-2">
+      <ColorBlobs />
       <Formik
-        initialValues={initialValues}
+        initialValues={state?.theme}
         validationSchema={colorSchema}
+        enableReinitialize
         onSubmit={(values) => {
           const { name } = values;
           delete values.name;
@@ -168,16 +146,17 @@ export default function ColorForm(props) {
       >
         {({ errors, touched, values }) => (
           <Form className="w-4/5 mx-auto grid grid-cols-2 gap-4">
-            <div className="flex flex-col col-span-2">
+            <div className="flex flex-col col-span-1 mx-auto">
               <div
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
-                className="flex flex-col"
+                className="flex flex-col w-64"
               >
                 <label htmlFor="name">Name</label>
                 <Field
                   name="name"
-                  className="py-1 px-2 shadow-md border-2 rounded-md outline-none w-64"
+                  className="py-1 px-2 shadow-md border-2 rounded-md outline-none"
+                  placeholder={state?.nameOfTheme}
                   style={{
                     borderColor: focused ? state?.theme.color : "transparent",
                     backgroundColor: state?.theme.navBgColor,
@@ -190,7 +169,8 @@ export default function ColorForm(props) {
                 </div>
               ) : null}
             </div>
-            {Object.keys(initialValues).map(
+            <div></div>
+            {Object.keys(state?.theme).map(
               (key) =>
                 key !== "name" && (
                   <Input
@@ -205,7 +185,14 @@ export default function ColorForm(props) {
                   />
                 )
             )}
-            <button className="col-span-2" type="submit">
+            <button
+              className="col-span-2 flex mx-auto my-4 py-2 px-4 rounded-lg hover:opacity-50 transition duration-200 ease-out"
+              style={{
+                backgroundColor: state?.theme.color,
+                color: state?.theme.bgColor,
+              }}
+              type="submit"
+            >
               Submit
             </button>
           </Form>

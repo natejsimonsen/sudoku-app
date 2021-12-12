@@ -2,6 +2,7 @@ import React, { useReducer, useContext } from "react";
 import _ from "lodash";
 
 const defaultSudokuGrid = {
+  notes: false,
   puzzle: [],
   complete: [],
   history: [],
@@ -78,6 +79,9 @@ function sudokuReducer(state, action) {
           .sort()
           .slice(1);
       break;
+    case "toggleNotes":
+      newState = { ...state, notes: !state.notes };
+      break;
     case "removeNum":
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] = 0;
       break;
@@ -89,7 +93,7 @@ function sudokuReducer(state, action) {
       };
       break;
     case "undo":
-      if (historyIndex >= 0) {
+      if (historyIndex >= 0 && newState.history.length > 0) {
         const [grid, { from }] = newState.history[historyIndex];
         const { block, row, col, num, rowBlocks, colBlocks } = setHighlights([
           ...grid,
@@ -154,6 +158,14 @@ function sudokuReducer(state, action) {
       newState.colBlock = colBlocks;
 
       break;
+    case "revealCell":
+      newState.puzzle[newState.currentBlock][newState.currentRow][
+        newState.currentCol
+      ] =
+        newState.complete[newState.currentBlock][newState.currentRow][
+          newState.currentCol
+        ];
+      break;
     case "moveGrid":
       const { currentBlock, currentCol, currentRow } = newState;
       if (typeof currentBlock !== "undefined") {
@@ -164,7 +176,8 @@ function sudokuReducer(state, action) {
           action.key === "ArrowRight" ||
           action.key === "D" ||
           action.key === "d" ||
-          action.key === "Tab"
+          action.key === "Tab" ||
+          action.key === " "
         ) {
           if (currentCol === 2 && currentBlock % 3 === 2) {
             newCol = 0;

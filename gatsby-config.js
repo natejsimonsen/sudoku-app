@@ -1,9 +1,5 @@
 module.exports = {
   pathPrefix: "/sudoku-app/",
-  flags: {
-    FAST_DEV: true,
-    // FAST_REFRESH: true,
-  },
   siteMetadata: {
     title: `Nate Simonsen, Sudoku Puzzle`,
     description: `Free sudoku with customizable colors and configuration. Beautiful minimal ui free of ads.`,

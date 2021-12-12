@@ -22,7 +22,7 @@ const SudokuCell = ({ i, x, ...props }) => {
     ) {
       let newState;
 
-      if (!state?.notes) {
+      if (!sudokuState?.notes) {
         if (!Number.isNaN(key) && key > 0) {
           newState = key;
           dispatch({ type: "setHighlights", grid: [block, row, col, key] });

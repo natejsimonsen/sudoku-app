@@ -9,11 +9,11 @@ const SudokuBlock = (props) => {
   const borderStyle = { borderRight: null, borderBottom: null };
 
   if (block % 3 < 2) {
-    borderStyle.borderRight = `2px solid ${state?.theme.boldBorderColor}`;
+    borderStyle.borderRight = `1px solid ${state?.theme.boldBorderColor}`;
   }
 
   if (block < 6) {
-    borderStyle.borderBottom = `2px solid ${state?.theme.boldBorderColor}`;
+    borderStyle.borderBottom = `1px solid ${state?.theme.boldBorderColor}`;
   }
 
   return (

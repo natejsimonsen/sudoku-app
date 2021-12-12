@@ -28,6 +28,16 @@ const SudokuGrid = (props) => {
     "ArrowRight",
     "Tab",
     "Enter",
+    "r",
+    "R",
+    "u",
+    "U",
+    "z",
+    "Z",
+    "n",
+    "h",
+    "N",
+    "H",
     "w",
     "a",
     "s",
@@ -41,13 +51,23 @@ const SudokuGrid = (props) => {
   const keyPressHandler = (event) => {
     if (state.disableHighlights) return;
     event.preventDefault();
-    if (Number.isFinite(+event.key)) {
+    if (Number.isFinite(+event.key))
       dispatch({ type: "changeNum", data: +event.key });
-    } else if (event.key === "Backspace" || event.key === "Delete") {
+    else if (event.key === "Backspace" || event.key === "Delete")
       dispatch({ type: "changeNum", data: event.key, delete: true });
-    } else {
-      dispatch({ type: "moveGrid", key: event.key });
-    }
+    else if (event.key === "r" || event.key === "R") dispatch({ type: "redo" });
+    else if (
+      event.key === "u" ||
+      event.key === "U" ||
+      event.key === "z" ||
+      event.key === "Z"
+    )
+      dispatch({ type: "undo" });
+    else if (event.key === "n" || event.key === "N")
+      dispatch({ type: "toggleNotes" });
+    else if (event.key === "h" || event.key === "H")
+      dispatch({ type: "revealCell" });
+    else dispatch({ type: "moveGrid", key: event.key });
   };
 
   useKey((event) => acceptedKeys.includes(event.key), keyPressHandler);

@@ -8,10 +8,15 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+const nonNegative = (i) => {
+  if (i < 0) return 0;
+  return i;
+};
+
 const SudokuToolbar = (props) => {
   const { state: userState, dispatch } = useUserConfig();
 
-  const [_, sudokuDispatch] = useSudoku();
+  const [sudokuState, sudokuDispatch] = useSudoku();
   const [height, setHeight] = useState(100);
 
   const ref = useCallback((node) => {
@@ -32,9 +37,9 @@ const SudokuToolbar = (props) => {
     >
       <div className="mb-6 space-x-5" ref={ref}>
         <button
-          onClick={dispatch.bind(null, { type: "toggleNotes" })}
+          onClick={sudokuDispatch.bind(null, { type: "toggleNotes" })}
           style={{
-            backgroundColor: userState?.notes
+            backgroundColor: sudokuState?.notes
               ? userState?.theme.darkerHighlightBg
               : userState?.theme.navBgColor,
           }}
@@ -49,7 +54,7 @@ const SudokuToolbar = (props) => {
             }}
             className="absolute inline-block px-2 -mt-4 -ml-2 font-semibold rounded-full"
           >
-            {userState?.notes ? (
+            {sudokuState?.notes ? (
               <p className="text-xs">On</p>
             ) : (
               <p className="text-xs">Off</p>
@@ -75,7 +80,7 @@ const SudokuToolbar = (props) => {
           <ReplayIcon style={{ transform: "scaleX(-1)" }} fontSize="large" />
         </button>
         <button
-          onClick={dispatch.bind(null, { type: "toggleNotes" })}
+          onClick={sudokuDispatch.bind(null, { type: "revealCell" })}
           className="p-2 rounded-lg shadow-xl outline-none hover:opacity-75"
           style={{
             backgroundColor: userState?.theme.navBgColor,
@@ -100,7 +105,7 @@ const SudokuToolbar = (props) => {
         {numbers.map((number) => (
           <button
             key={number}
-            className="font-semibold outline-none hover:opacity-75"
+            className="relative font-semibold shadow-xl outline-none hover:opacity-75"
             style={{
               backgroundColor: userState?.theme.highlightBgColor,
               height,
@@ -108,6 +113,22 @@ const SudokuToolbar = (props) => {
             onClick={() => sudokuDispatch({ type: "changeNum", data: number })}
           >
             {number}
+            <p
+              className="absolute text-sm -ml-1 h-5 w-5 shadow-sm rounded-full"
+              style={{ backgroundColor: userState?.theme.darkerHighlightBg }}
+            >
+              {nonNegative(
+                9 -
+                  sudokuState.puzzle
+                    .flat()
+                    .flat()
+                    .reduce((acc, val) => {
+                      if (val === number) return (acc += 1);
+                      if (val?.number === number) return (acc += 1);
+                      return acc;
+                    }, 0)
+              )}
+            </p>
           </button>
         ))}
       </div>

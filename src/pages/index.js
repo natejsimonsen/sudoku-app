@@ -9,14 +9,33 @@ import SudokuGrid from "../components/SudokuGrid";
 import SudokuToolbar from "../components/SudokuToolbar";
 
 const IndexPage = () => {
+  const [clicked, setClick] = React.useState(false);
+  const [data, setData] = React.useState(null);
+  const [error, setError] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+
   const apiUrl = process.env.GATSBY_PRODUCTION
     ? "https://sudoku-generator-api.herokuapp.com/?difficulty=55"
     : "http://localhost:3000/?difficulty=55";
 
-  const { loading, error, data } = useFetch(apiUrl, {}, []);
+  // const { loading, error, data } = useFetch(apiUrl, {}, [clicked]);
+  React.useEffect(() => {
+    setLoading(true);
+    try {
+      fetch(apiUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          setData(data);
+          setLoading(false);
+        });
+    } catch (e) {
+      setError(e.message);
+    }
+  }, [clicked]);
 
   return (
     <>
+      {/*<button onClick={() => setClick(!clicked)}>Click me</button>*/}
       <SudokuProvider>
         <UserConfigProvider>
           <Layout>

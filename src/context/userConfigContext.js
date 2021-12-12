@@ -2,15 +2,14 @@ import React, { useContext, useReducer } from "react";
 import colors from "../config/colors";
 import _ from "lodash";
 
-let userSettings;
+// let userSettings;
 
-// const userSettings =
-//   typeof localStorage !== "undefined" && localStorage.getItem("settings");
+const userSettings =
+  typeof localStorage !== "undefined" && localStorage.getItem("settings");
 
 let config;
 
 const defaultConfig = {
-  notes: false,
   showUserErrors: true,
   highlightBlocks: true,
   highlightRows: true,
@@ -18,13 +17,12 @@ const defaultConfig = {
   highlightSameNumbers: true,
   themes: _.cloneDeep(colors),
   theme: colors.default,
+  nameOfTheme: "",
   disableClick: false,
 };
 
-if (userSettings) {
-  config = JSON.parse(userSettings);
-} else {
-  config = defaultConfig;
+if (typeof localStorage !== "undefined") {
+  config = userSettings ? JSON.parse(userSettings) : defaultConfig;
 }
 
 const UserConfigContext = React.createContext(config);
@@ -33,16 +31,17 @@ const userConfigReducer = (state, action) => {
   let settings;
   switch (action.type) {
     case "changeTheme":
-      settings = { ...state, theme: state.themes[action.name] };
+      settings = {
+        ...state,
+        theme: state.themes[action.name],
+        nameOfTheme: action.name,
+      };
       break;
     case "addTheme":
       settings = {
         ...state,
         themes: { ...state.themes, [action.name]: action.theme },
       };
-      break;
-    case "toggleNotes":
-      settings = { ...state, notes: !state.notes };
       break;
     case "toggleErrors":
       settings = { ...state, showUserErrors: !state.showUserErrors };
