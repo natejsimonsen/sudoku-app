@@ -36,19 +36,31 @@ const colors = {
     userSudokuNumColor: "#83a598",
   },
   Desert: {
-    bgColor: "#fdf6e3",
-    boldBorderColor: "#d33682",
-    borderColor: "#002b36",
     color: "#657b83",
-    darkerHighlightBg: "#d1ccbc",
-    errorColor: "#cc241d",
-    highlightBgColor: "#eee8d5",
     navBgColor: "#c9c2a9",
+    bgColor: "#fdf6e3",
+    borderColor: "#002b36",
+    boldBorderColor: "#d33682",
+    highlightBgColor: "#eee8d5",
+    darkerHighlightBg: "#d1ccbc",
     successColor: "#859900",
+    errorColor: "#cc241d",
     userSudokuNumColor: "#2aa198",
+  },
+  "Ayu Light": {
+    color: "#5c6166",
+    navBgColor: "#8a91991A",
+    bgColor: "#fcfcfc",
+    borderColor: "#787B8099",
+    boldBorderColor: "#fa8d3e",
+    highlightBgColor: "#e3ecf6",
+    darkerHighlightBg: "#c3ccf6",
+    successColor: "#6cbf43",
+    errorColor: "#f07171",
+    userSudokuNumColor: "#282828",
   },
 };
 
-colors.default = colors["Gruvbox"];
+colors.default = colors["Simple Light"];
 
 export default colors;

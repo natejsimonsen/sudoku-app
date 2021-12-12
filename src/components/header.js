@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useUserConfig } from "../context/userConfigContext";
 import { Link } from "gatsby";
-import Dropdown from "./Dropdown";
 import Modal from "./Modal";
 import Switch from "./Switch";
 import PaletteIcon from "@material-ui/icons/Palette";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Tabs from "./Tabs";
+// import Tabs from "./Tabs";
+import ColorForm from "./ColorForm";
 
 const Header = () => {
   const { state, dispatch } = useUserConfig();
@@ -40,9 +40,14 @@ const Header = () => {
           <button className="outline-none" onClick={setOpen.bind(null, true)}>
             <SettingsIcon fontSize="large" />
           </button>
-          <Dropdown />
-          <Modal open={openColorModal} setOpen={setOpenColorModal}>
-            <Tabs />
+          <Modal centered open={openColorModal} setOpen={setOpenColorModal}>
+            <h2
+              style={{ color: state.color }}
+              className="font-bold text-3xl text-center mx-auto"
+            >
+              Color Builder
+            </h2>
+            <ColorForm />
           </Modal>
           <Modal open={open} setOpen={setOpen}>
             <h2 className="pb-2 text-3xl font-bold">Highlighting</h2>
