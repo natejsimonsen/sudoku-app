@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Popup from "./Popup";
-import { Field } from "formik";
-import { useUserConfig } from "../context/userConfigContext";
+import React, { useState } from 'react';
+import Popup from './Popup';
+import { Field } from 'formik';
+import { useUserConfig } from '../context/userConfigContext';
 
 export default function Input(props) {
   const { state: userState } = useUserConfig();
@@ -28,10 +28,10 @@ export default function Input(props) {
       <div className="flex items-center">
         <div
           className={`w-8 h-8 mr-4 ${
-            id === "bgColor" ? "border border-black" : ""
+            id === 'bgColor' ? 'border border-black' : ''
           } rounded-full shadow-lg`}
           style={{
-            backgroundColor: !errors[id] ? values[id] : "transparent",
+            backgroundColor: !errors[id] ? values[id] : 'transparent',
           }}
         ></div>
         <div
@@ -43,16 +43,16 @@ export default function Input(props) {
             name={id}
             className="py-1 shadow-md px-2 border-2 w-52 rounded-md outline-none"
             style={{
-              borderColor: focused ? state?.theme.color : "transparent",
-              backgroundColor: state?.theme.navBgColor,
+              borderColor: focused ? state.theme.color : 'transparent',
+              backgroundColor: state.theme.navBgColor,
             }}
           />
           <Popup
             className="absolute"
             style={{
-              top: "50%",
-              right: "4px",
-              transform: "translateY(-50%)",
+              top: '50%',
+              right: '4px',
+              transform: 'translateY(-50%)',
             }}
           >
             <div
@@ -68,7 +68,7 @@ export default function Input(props) {
         </div>
       </div>
       {errors[id] && touched[id] ? (
-        <div style={{ color: state?.theme.errorColor }}>{errors[id]}</div>
+        <div style={{ color: state.theme.errorColor }}>{errors[id]}</div>
       ) : null}
     </div>
   );

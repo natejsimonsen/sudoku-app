@@ -1,7 +1,7 @@
-import React from "react";
-import { useUserConfig } from "../context/userConfigContext";
-import { useSudoku } from "../context/sudokuContext";
-import _ from "lodash";
+import React from 'react';
+import { useUserConfig } from '../context/userConfigContext';
+import { useSudoku } from '../context/sudokuContext';
+import _ from 'lodash';
 
 const SudokuCell = ({ i, x, ...props }) => {
   const { state } = useUserConfig();
@@ -10,54 +10,54 @@ const SudokuCell = ({ i, x, ...props }) => {
   const row = Math.floor(i / 3);
   const col = i % 3;
 
-  let backgroundColor = state?.theme.bgColor;
+  let backgroundColor = state.theme.bgColor;
 
   if (
     props.currentBlock === props.block &&
     props.currentRow === row &&
     props.currentCol === col
   ) {
-    backgroundColor = state?.theme.darkerHighlightBg;
-  } else if (props.currentBlock === props.block && state?.highlightBlocks) {
-    backgroundColor = state?.theme.highlightBgColor;
+    backgroundColor = state.theme.darkerHighlightBg;
+  } else if (props.currentBlock === props.block && state.highlightBlocks) {
+    backgroundColor = state.theme.highlightBgColor;
   } else if (
     props.colBlock?.includes(props.block) &&
     props.currentCol === col &&
-    state?.highlightCols
+    state.highlightCols
   ) {
-    backgroundColor = state?.theme.highlightBgColor;
+    backgroundColor = state.theme.highlightBgColor;
   } else if (
     props.rowBlock?.includes(props.block) &&
     props.currentRow === row &&
-    state?.highlightRows
+    state.highlightRows
   ) {
-    backgroundColor = state?.theme.highlightBgColor;
+    backgroundColor = state.theme.highlightBgColor;
   } else if (
     props.currentBlock === props.block &&
-    state?.highlightCols &&
+    state.highlightCols &&
     col === props.currentCol
   ) {
-    backgroundColor = state?.theme.highlightBgColor;
+    backgroundColor = state.theme.highlightBgColor;
   } else if (
     props.currentBlock === props.block &&
-    state?.highlightRows &&
+    state.highlightRows &&
     row === props.currentRow
   ) {
-    backgroundColor = state?.theme.highlightBgColor;
+    backgroundColor = state.theme.highlightBgColor;
   }
 
   const borderStyle = {
-    borderRight: `1px solid ${state?.theme.borderColor}`,
-    borderBottom: `1px solid ${state?.theme.borderColor}`,
+    borderRight: `1px solid ${state.theme.borderColor}`,
+    borderBottom: `1px solid ${state.theme.borderColor}`,
   };
   if (row === 0 && props.block < 3)
-    borderStyle.borderTop = `1px solid ${state?.theme.borderColor}`;
+    borderStyle.borderTop = `1px solid ${state.theme.borderColor}`;
   if (row === 0 && props.block >= 3)
-    borderStyle.borderTop = `1px solid ${state?.theme.boldBorderColor}`;
+    borderStyle.borderTop = `1px solid ${state.theme.boldBorderColor}`;
   if (col === 0 && props.block % 3 === 0)
-    borderStyle.borderLeft = `1px solid ${state?.theme.borderColor}`;
+    borderStyle.borderLeft = `1px solid ${state.theme.borderColor}`;
   if (col === 0 && props.block % 3 !== 0) {
-    borderStyle.borderLeft = `1px solid ${state?.theme.boldBorderColor}`;
+    borderStyle.borderLeft = `1px solid ${state.theme.boldBorderColor}`;
   }
 
   const handleKeyEvent = (e) => {
@@ -80,13 +80,13 @@ const SudokuCell = ({ i, x, ...props }) => {
         .concat(key);
     }
 
-    if (props.items.length > 0 && e.key === "Backspace")
+    if (props.items.length > 0 && e.key === 'Backspace')
       newState.puzzle[props.block][row][col] = newState.puzzle[props.block][
         row
       ][col]
         .sort()
         .slice(0, -1);
-    else if (props.items.length > 0 && e.key === "Delete")
+    else if (props.items.length > 0 && e.key === 'Delete')
       newState.puzzle[props.block][row][col] = newState.puzzle[props.block][
         row
       ][col]
@@ -96,7 +96,7 @@ const SudokuCell = ({ i, x, ...props }) => {
     if (newState.puzzle[props.block][row][col].length === 0)
       newState.puzzle[props.block][row][col] = 0;
 
-    if (!state?.notes) newState.puzzle[props.block][row][col] = { number: key };
+    if (!state.notes) newState.puzzle[props.block][row][col] = { number: key };
 
     setState(newState);
   };
@@ -108,7 +108,7 @@ const SudokuCell = ({ i, x, ...props }) => {
         fontSize: x / (14 * 3),
         height: x / 9,
         width: x / 9,
-        outline: "none",
+        outline: 'none',
         ...borderStyle,
         backgroundColor,
       }}
@@ -122,9 +122,10 @@ const SudokuCell = ({ i, x, ...props }) => {
         props.items.map((note) => (
           <p
             key={note}
-            className={`row-start-${Math.floor((note - 1) / 3) + 1} col-start-${
-              ((note - 1) % 3) + 1
-            }`}
+            style={{
+              gridRowStart: Math.floor((note - 1) / 3 + 1),
+              gridColumnStart: Math.floor(((note - 1) % 3) + 1),
+            }}
           >
             {note}
           </p>

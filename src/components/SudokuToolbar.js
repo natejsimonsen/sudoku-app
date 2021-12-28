@@ -1,10 +1,10 @@
-import React, { useState, useCallback } from "react";
-import { useUserConfig } from "../context/userConfigContext";
-import { useSudoku } from "../context/sudokuContext";
-import { Create } from "@material-ui/icons";
-import ReplayIcon from "@material-ui/icons/Replay";
-import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import React, { useState, useCallback } from 'react';
+import { useUserConfig } from '../context/userConfigContext';
+import { useSudoku } from '../context/sudokuContext';
+import { Create } from '@material-ui/icons';
+import ReplayIcon from '@material-ui/icons/Replay';
+import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -30,26 +30,26 @@ const SudokuToolbar = (props) => {
       role="menu"
       onClick={() => {
         sudokuDispatch({
-          type: "enableHighlights",
+          type: 'enableHighlights',
         });
       }}
       className="sudoku-toolbar pb-0 mx-auto mb-0"
     >
       <div className="mb-6 space-x-5" ref={ref}>
         <button
-          onClick={sudokuDispatch.bind(null, { type: "toggleNotes" })}
+          onClick={sudokuDispatch.bind(null, { type: 'toggleNotes' })}
           style={{
             backgroundColor: sudokuState?.notes
-              ? userState?.theme.darkerHighlightBg
-              : userState?.theme.navBgColor,
+              ? userState.theme.darkerHighlightBg
+              : userState.theme.navBgColor,
           }}
           className="p-2 rounded-lg shadow-xl outline-none hover:opacity-75"
         >
           <Create fontSize="large" />
           <div
             style={{
-              backgroundColor: userState?.theme?.successColor,
-              color: userState?.theme.bgColor,
+              backgroundColor: userState.theme?.successColor,
+              color: userState.theme.bgColor,
               zIndex: 0,
             }}
             className="absolute inline-block px-2 -mt-4 -ml-2 font-semibold rounded-full"
@@ -62,40 +62,40 @@ const SudokuToolbar = (props) => {
           </div>
         </button>
         <button
-          onClick={sudokuDispatch.bind(null, { type: "undo" })}
+          onClick={sudokuDispatch.bind(null, { type: 'undo' })}
           className="p-2 rounded-lg shadow-xl outline-none hover:opacity-75"
           style={{
-            backgroundColor: userState?.theme.navBgColor,
+            backgroundColor: userState.theme.navBgColor,
           }}
         >
           <ReplayIcon fontSize="large" />
         </button>
         <button
-          onClick={sudokuDispatch.bind(null, { type: "redo" })}
+          onClick={sudokuDispatch.bind(null, { type: 'redo' })}
           className="p-2 rounded-lg shadow-xl outline-none hover:opacity-75"
           style={{
-            backgroundColor: userState?.theme.navBgColor,
+            backgroundColor: userState.theme.navBgColor,
           }}
         >
-          <ReplayIcon style={{ transform: "scaleX(-1)" }} fontSize="large" />
+          <ReplayIcon style={{ transform: 'scaleX(-1)' }} fontSize="large" />
         </button>
         <button
-          onClick={sudokuDispatch.bind(null, { type: "revealCell" })}
+          onClick={sudokuDispatch.bind(null, { type: 'revealCell' })}
           className="p-2 rounded-lg shadow-xl outline-none hover:opacity-75"
           style={{
-            backgroundColor: userState?.theme.navBgColor,
+            backgroundColor: userState.theme.navBgColor,
           }}
         >
           <EmojiObjectsIcon fontSize="large" />
         </button>
         <button
           onClick={sudokuDispatch.bind(null, {
-            type: "changeNum",
-            data: "Backspace",
+            type: 'changeNum',
+            data: 'Backspace',
           })}
           className="p-2 rounded-lg shadow-xl outline-none hover:opacity-75"
           style={{
-            backgroundColor: userState?.theme.navBgColor,
+            backgroundColor: userState.theme.navBgColor,
           }}
         >
           <HighlightOffIcon fontSize="large" />
@@ -107,15 +107,15 @@ const SudokuToolbar = (props) => {
             key={number}
             className="relative font-semibold shadow-xl outline-none hover:opacity-75"
             style={{
-              backgroundColor: userState?.theme.highlightBgColor,
+              backgroundColor: userState.theme.highlightBgColor,
               height,
             }}
-            onClick={() => sudokuDispatch({ type: "changeNum", data: number })}
+            onClick={() => sudokuDispatch({ type: 'changeNum', data: number })}
           >
             {number}
             <p
               className="absolute text-sm -ml-1 h-5 w-5 shadow-sm rounded-full"
-              style={{ backgroundColor: userState?.theme.darkerHighlightBg }}
+              style={{ backgroundColor: userState.theme.darkerHighlightBg }}
             >
               {nonNegative(
                 9 -

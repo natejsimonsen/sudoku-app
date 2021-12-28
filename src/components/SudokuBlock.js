@@ -1,7 +1,7 @@
-import React from "react";
-import SudokuCell from "./SudokuCell";
-import SudokuLockedCell from "./SudokuLockedCell";
-import { useUserConfig } from "../context/userConfigContext";
+import React from 'react';
+import SudokuCell from './SudokuCell';
+import SudokuLockedCell from './SudokuLockedCell';
+import { useUserConfig } from '../context/userConfigContext';
 
 const SudokuBlock = (props) => {
   const { state } = useUserConfig();
@@ -9,11 +9,11 @@ const SudokuBlock = (props) => {
   const borderStyle = { borderRight: null, borderBottom: null };
 
   if (block % 3 < 2) {
-    borderStyle.borderRight = `1px solid ${state?.theme.boldBorderColor}`;
+    borderStyle.borderRight = `1px solid ${state.theme.boldBorderColor}`;
   }
 
   if (block < 6) {
-    borderStyle.borderBottom = `1px solid ${state?.theme.boldBorderColor}`;
+    borderStyle.borderBottom = `1px solid ${state.theme.boldBorderColor}`;
   }
 
   return (
@@ -36,7 +36,7 @@ const SudokuBlock = (props) => {
               />
             ))
           : props.block.flat().map((item, i) =>
-              typeof item === "object" || item === 0 ? (
+              typeof item === 'object' || item === 0 ? (
                 <SudokuCell
                   correctNumber={props.completeBlock.flat()[i]}
                   block={props.i}
@@ -45,7 +45,7 @@ const SudokuBlock = (props) => {
                   numsExclude={props.block
                     .flat()
                     .filter(
-                      (num) => !Array.isArray(num) && typeof num === "object"
+                      (num) => !Array.isArray(num) && typeof num === 'object'
                     )
                     .map((num) => num.number)}
                   x={props.x}

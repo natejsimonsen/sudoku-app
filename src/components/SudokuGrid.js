@@ -6,47 +6,47 @@ import { useKey } from 'react-use';
 import _ from 'lodash';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
+const acceptedKeys = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  'Backspace',
+  'Delete',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'Tab',
+  'Enter',
+  'r',
+  'R',
+  'u',
+  'U',
+  'z',
+  'Z',
+  'n',
+  'h',
+  'N',
+  'H',
+  'w',
+  'a',
+  's',
+  'd',
+  'W',
+  'A',
+  'S',
+  'D',
+];
+
 const SudokuGrid = (props) => {
   const [state, dispatch] = useSudoku();
   const { state: themeState } = useUserConfig();
-
-  const acceptedKeys = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    'Backspace',
-    'Delete',
-    'ArrowUp',
-    'ArrowDown',
-    'ArrowLeft',
-    'ArrowRight',
-    'Tab',
-    'Enter',
-    'r',
-    'R',
-    'u',
-    'U',
-    'z',
-    'Z',
-    'n',
-    'h',
-    'N',
-    'H',
-    'w',
-    'a',
-    's',
-    'd',
-    'W',
-    'A',
-    'S',
-    'D',
-  ];
 
   const keyPressHandler = (event) => {
     if (state.disableHighlights) return;
@@ -112,7 +112,7 @@ const SudokuGrid = (props) => {
       <section
         className="grid grid-cols-3 grid-rows-3"
         style={{
-          border: `1px solid ${themeState?.theme.borderColor}`,
+          border: `1px solid ${themeState.theme.borderColor}`,
           boxSizing: 'content-box',
           width: sudokuGridWidth,
           height: sudokuGridWidth,

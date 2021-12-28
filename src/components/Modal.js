@@ -1,6 +1,6 @@
-import React, { Fragment } from "react";
-import { Transition } from "@headlessui/react";
-import { useUserConfig } from "../context/userConfigContext";
+import React, { Fragment } from 'react';
+import { Transition } from '@headlessui/react';
+import { useUserConfig } from '../context/userConfigContext';
 
 export default function Modal({ open, setOpen, children }) {
   const { state } = useUserConfig();
@@ -19,8 +19,8 @@ export default function Modal({ open, setOpen, children }) {
           >
             <div
               style={{
-                backgroundColor: state?.theme.navBgColor,
-                opacity: "75%",
+                backgroundColor: state.theme.navBgColor,
+                opacity: '75%',
               }}
               className="fixed inset-0 transition-opacity"
               onClick={() => setOpen(false)}
@@ -45,10 +45,10 @@ export default function Modal({ open, setOpen, children }) {
           >
             <div
               style={{
-                color: state?.theme.color,
-                backgroundColor: state?.theme.bgColor,
-                width: "90vw",
-                height: "90vh",
+                color: state.theme.color,
+                backgroundColor: state.theme.bgColor,
+                width: '90vw',
+                height: '90vh',
               }}
               className="inline-block w-full max-w-6xl px-4 pt-5 pb-4 overflow-hidden text-left align-middle rounded-lg shadow-xl sm:p-6 transform transition-all sm:my-8"
             >

@@ -43,7 +43,7 @@ const Header = () => {
           </button>
           <Modal centered open={openColorModal} setOpen={setOpenColorModal}>
             <h2
-              style={{ color: state?.color }}
+              style={{ color: state.color }}
               className="font-bold text-3xl text-center mx-auto"
             >
               Color Builder
@@ -54,32 +54,32 @@ const Header = () => {
             <h2 className="pb-2 text-3xl font-bold">Highlighting</h2>
             <hr
               className="w-48 mb-4 border-b"
-              style={{ borderColor: state?.theme.borderColor }}
+              style={{ borderColor: state.theme.borderColor }}
             />
             <div className="flex flex-col w-3/4 mx-auto space-y-4 divide-y">
               <Switch
                 clicked={dispatch?.bind(null, { type: 'highlightBlocks' })}
-                checked={state?.highlightBlocks}
+                checked={state.highlightBlocks}
                 label="Highlight Blocks"
               />
               <Switch
                 clicked={dispatch?.bind(null, { type: 'highlightRows' })}
-                checked={state?.highlightRows}
+                checked={state.highlightRows}
                 label="Highlight Rows"
               />
               <Switch
                 clicked={dispatch?.bind(null, { type: 'highlightColumns' })}
-                checked={state?.highlightCols}
+                checked={state.highlightCols}
                 label="Highlight Columns"
               />
               <Switch
                 clicked={dispatch?.bind(null, { type: 'highlightSameNumbers' })}
-                checked={state?.highlightSameNumbers}
+                checked={state.highlightSameNumbers}
                 label="Highlight Same Numbers"
               />
               <Switch
                 clicked={dispatch?.bind(null, { type: 'toggleErrors' })}
-                checked={state?.showUserErrors}
+                checked={state.showUserErrors}
                 label="Autocheck Mistakes"
               />
             </div>
