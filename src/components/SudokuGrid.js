@@ -1,73 +1,73 @@
-import React, { useEffect } from "react";
-import SudokuBlock from "./SudokuBlock";
-import { useSudoku } from "../context/sudokuContext";
-import { useUserConfig } from "../context/userConfigContext";
-import { useKey } from "react-use";
-import _ from "lodash";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import React, { useEffect } from 'react';
+import SudokuBlock from './SudokuBlock';
+import { useSudoku } from '../context/sudokuContext';
+import { useUserConfig } from '../context/userConfigContext';
+import { useKey } from 'react-use';
+import _ from 'lodash';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 const SudokuGrid = (props) => {
   const [state, dispatch] = useSudoku();
   const { state: themeState } = useUserConfig();
 
   const acceptedKeys = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "Backspace",
-    "Delete",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "Tab",
-    "Enter",
-    "r",
-    "R",
-    "u",
-    "U",
-    "z",
-    "Z",
-    "n",
-    "h",
-    "N",
-    "H",
-    "w",
-    "a",
-    "s",
-    "d",
-    "W",
-    "A",
-    "S",
-    "D",
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'Backspace',
+    'Delete',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'Tab',
+    'Enter',
+    'r',
+    'R',
+    'u',
+    'U',
+    'z',
+    'Z',
+    'n',
+    'h',
+    'N',
+    'H',
+    'w',
+    'a',
+    's',
+    'd',
+    'W',
+    'A',
+    'S',
+    'D',
   ];
 
   const keyPressHandler = (event) => {
     if (state.disableHighlights) return;
     event.preventDefault();
     if (Number.isFinite(+event.key))
-      dispatch({ type: "changeNum", data: +event.key });
-    else if (event.key === "Backspace" || event.key === "Delete")
-      dispatch({ type: "changeNum", data: event.key, delete: true });
-    else if (event.key === "r" || event.key === "R") dispatch({ type: "redo" });
+      dispatch({ type: 'changeNum', data: +event.key });
+    else if (event.key === 'Backspace' || event.key === 'Delete')
+      dispatch({ type: 'changeNum', data: event.key, delete: true });
+    else if (event.key === 'r' || event.key === 'R') dispatch({ type: 'redo' });
     else if (
-      event.key === "u" ||
-      event.key === "U" ||
-      event.key === "z" ||
-      event.key === "Z"
+      event.key === 'u' ||
+      event.key === 'U' ||
+      event.key === 'z' ||
+      event.key === 'Z'
     )
-      dispatch({ type: "undo" });
-    else if (event.key === "n" || event.key === "N")
-      dispatch({ type: "toggleNotes" });
-    else if (event.key === "h" || event.key === "H")
-      dispatch({ type: "revealCell" });
-    else dispatch({ type: "moveGrid", key: event.key });
+      dispatch({ type: 'undo' });
+    else if (event.key === 'n' || event.key === 'N')
+      dispatch({ type: 'toggleNotes' });
+    else if (event.key === 'h' || event.key === 'H')
+      dispatch({ type: 'revealCell' });
+    else dispatch({ type: 'moveGrid', key: event.key });
   };
 
   useKey((event) => acceptedKeys.includes(event.key), keyPressHandler);
@@ -77,17 +77,17 @@ const SudokuGrid = (props) => {
 
     if (props.loading) return;
 
-    const block = e.target.closest(".sudoku-block");
-    const sudokuCell = e.target.closest(".sudoku-cell");
+    const block = e.target.closest('.sudoku-block');
+    const sudokuCell = e.target.closest('.sudoku-cell');
 
     const rowNum = +sudokuCell.dataset.row;
     const columnNum = +sudokuCell.dataset.column;
     const currentNum = +sudokuCell.dataset.number;
     const blockNum = +block.dataset.block;
 
-    dispatch({ type: "enableHighlights" });
+    dispatch({ type: 'enableHighlights' });
     dispatch({
-      type: "setHighlights",
+      type: 'setHighlights',
       grid: [blockNum, rowNum, columnNum, currentNum],
     });
   };
@@ -99,12 +99,12 @@ const SudokuGrid = (props) => {
 
   useEffect(() => {
     const originalData = _.cloneDeep(props.data);
-    dispatch({ type: "initialize", data: originalData });
+    dispatch({ type: 'initialize', data: originalData });
   }, [props.loading]);
 
   const handleClickAway = (e) => {
-    if (e.target.closest(".sudoku-toolbar")) return;
-    dispatch({ type: "disableHighlights" });
+    if (e.target.closest('.sudoku-toolbar')) return;
+    dispatch({ type: 'disableHighlights' });
   };
 
   return (
@@ -113,7 +113,7 @@ const SudokuGrid = (props) => {
         className="grid grid-cols-3 grid-rows-3"
         style={{
           border: `1px solid ${themeState?.theme.borderColor}`,
-          boxSizing: "content-box",
+          boxSizing: 'content-box',
           width: sudokuGridWidth,
           height: sudokuGridWidth,
         }}

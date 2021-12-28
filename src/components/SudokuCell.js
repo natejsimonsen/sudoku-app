@@ -147,23 +147,6 @@ const SudokuCell = ({ i, x, ...props }) => {
     backgroundColor = state?.theme.highlightBgColor;
   }
 
-  // useEffect(() => {
-  //   if (
-  //     sudokuState.currentBlock === block &&
-  //     sudokuState.currentRow === row &&
-  //     sudokuState.currentCol === col &&
-  //     sudokuState.currentNum
-  //   ) {
-  //     console.log(props.numsExclude);
-  //   }
-  // }, [
-  //   sudokuState.currentBlock,
-  //   sudokuState.currentRow,
-  //   sudokuState.currentCol,
-  //   sudokuState.currentNum,
-  //   props.numsExclude,
-  // ]);
-
   const normalModeClass =
     "sudoku-cell font-semibold flex justify-center text-center items-center";
   const notesModeClass =
@@ -197,7 +180,13 @@ const SudokuCell = ({ i, x, ...props }) => {
           {props.number.map((note) => (
             <p
               key={note}
-              className={`row-start-${
+              style={{
+                backgroundColor:
+                  sudokuState.currentNum === note
+                    ? state.theme.darkerHighlightBg
+                    : "transparent",
+              }}
+              className={`rounded-full row-start-${
                 Math.floor((note - 1) / 3) + 1
               } col-start-${((note - 1) % 3) + 1}`}
             >

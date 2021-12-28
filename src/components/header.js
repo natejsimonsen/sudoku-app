@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import { useUserConfig } from "../context/userConfigContext";
-import { Link } from "gatsby";
-import Modal from "./Modal";
-import Switch from "./Switch";
-import PaletteIcon from "@material-ui/icons/Palette";
-import SettingsIcon from "@material-ui/icons/Settings";
+import React, { useState } from 'react';
+import { useUserConfig } from '../context/userConfigContext';
+import { Link } from 'gatsby';
+import Modal from './Modal';
+import Switch from './Switch';
+import PaletteIcon from '@material-ui/icons/Palette';
+import SettingsIcon from '@material-ui/icons/Settings';
 // import Tabs from "./Tabs";
-import ColorForm from "./ColorForm";
+import ColorForm from './ColorForm';
 
 const Header = () => {
   const { state, dispatch } = useUserConfig();
   const [open, setOpen] = useState(false);
   const [openColorModal, setOpenColorModal] = useState(false);
+
   return (
     <header
       style={{
-        background: state?.theme.navBgColor,
-        color: state?.theme.color,
+        background: state.theme.navBgColor,
+        color: state.theme.color,
         marginBottom: `1.45rem`,
       }}
     >
@@ -42,7 +43,7 @@ const Header = () => {
           </button>
           <Modal centered open={openColorModal} setOpen={setOpenColorModal}>
             <h2
-              style={{ color: state.color }}
+              style={{ color: state?.color }}
               className="font-bold text-3xl text-center mx-auto"
             >
               Color Builder
@@ -57,27 +58,27 @@ const Header = () => {
             />
             <div className="flex flex-col w-3/4 mx-auto space-y-4 divide-y">
               <Switch
-                clicked={dispatch?.bind(null, { type: "highlightBlocks" })}
+                clicked={dispatch?.bind(null, { type: 'highlightBlocks' })}
                 checked={state?.highlightBlocks}
                 label="Highlight Blocks"
               />
               <Switch
-                clicked={dispatch?.bind(null, { type: "highlightRows" })}
+                clicked={dispatch?.bind(null, { type: 'highlightRows' })}
                 checked={state?.highlightRows}
                 label="Highlight Rows"
               />
               <Switch
-                clicked={dispatch?.bind(null, { type: "highlightColumns" })}
+                clicked={dispatch?.bind(null, { type: 'highlightColumns' })}
                 checked={state?.highlightCols}
                 label="Highlight Columns"
               />
               <Switch
-                clicked={dispatch?.bind(null, { type: "highlightSameNumbers" })}
+                clicked={dispatch?.bind(null, { type: 'highlightSameNumbers' })}
                 checked={state?.highlightSameNumbers}
                 label="Highlight Same Numbers"
               />
               <Switch
-                clicked={dispatch?.bind(null, { type: "toggleErrors" })}
+                clicked={dispatch?.bind(null, { type: 'toggleErrors' })}
                 checked={state?.showUserErrors}
                 label="Autocheck Mistakes"
               />

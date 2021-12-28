@@ -1,5 +1,5 @@
 module.exports = {
-  pathPrefix: "/sudoku-app/",
+  pathPrefix: '/sudoku-app/',
   siteMetadata: {
     title: `Nate Simonsen, Sudoku Puzzle`,
     description: `Free sudoku with customizable colors and configuration. Beautiful minimal ui free of ads.`,
@@ -13,8 +13,8 @@ module.exports = {
         fonts: {
           google: [
             {
-              family: "Open Sans",
-              variants: ["300", "400", "500", "600", "700", "800"],
+              family: 'Open Sans',
+              variants: ['300', '400', '500', '600', '700', '800'],
             },
           ],
         },
@@ -22,7 +22,7 @@ module.exports = {
     },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-material-ui`,
-    "gatsby-plugin-postcss",
+    'gatsby-plugin-postcss',
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -33,6 +33,7 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    `gatsby-plugin-remove-serviceworker`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -45,6 +46,5 @@ module.exports = {
         icon: `src/images/sudoku.png`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-offline`,
   ],
 };

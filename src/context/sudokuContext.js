@@ -1,5 +1,5 @@
-import React, { useReducer, useContext } from "react";
-import _ from "lodash";
+import React, { useReducer, useContext } from 'react';
+import _ from 'lodash';
 
 const defaultSudokuGrid = {
   notes: false,
@@ -16,7 +16,7 @@ const defaultSudokuGrid = {
 
 let historyIndex = 0;
 
-const SudokuContext = React.createContext();
+const SudokuContext = React.createContext(defaultSudokuGrid);
 
 function setHighlights(grid) {
   const [block, row, col, num] = grid;
@@ -43,56 +43,58 @@ function setHighlights(grid) {
 function sudokuReducer(state, action) {
   let newState = _.cloneDeep(state);
   switch (action.type) {
-    case "initialize":
+    case 'initialize':
       newState = {
         ...defaultSudokuGrid,
         ...action.data,
       };
       break;
-    case "addItem":
+    case 'addItem':
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] =
         action.data;
       break;
-    case "removeNote":
+    case 'removeNote':
       const removeIndex = newState.puzzle[action.grid[0]][action.grid[1]][
         action.grid[2]
-      ].findIndex((val) => val === action.data);
+      ]
+        .sort()
+        .findIndex((val) => val === action.data);
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]]
         .sort()
         .splice(removeIndex, 1);
       break;
-    case "addNote":
+    case 'addNote':
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] =
         newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]]
           .sort()
           .concat(action.data);
       break;
-    case "removeNoteEnd":
+    case 'removeNoteEnd':
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] =
         newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]]
           .sort()
           .slice(0, -1);
       break;
-    case "removeNoteStart":
+    case 'removeNoteStart':
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] =
         newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]]
           .sort()
           .slice(1);
       break;
-    case "toggleNotes":
+    case 'toggleNotes':
       newState = { ...state, notes: !state.notes };
       break;
-    case "removeNum":
+    case 'removeNum':
       newState.puzzle[action.grid[0]][action.grid[1]][action.grid[2]] = 0;
       break;
-    case "changeNum":
+    case 'changeNum':
       newState = {
         ...newState,
         currentNum: action.data,
         keyHit: !newState.keyHit,
       };
       break;
-    case "undo":
+    case 'undo':
       if (historyIndex >= 0 && newState.history.length > 0) {
         const [grid, { from }] = newState.history[historyIndex];
         const { block, row, col, num, rowBlocks, colBlocks } = setHighlights([
@@ -110,7 +112,7 @@ function sudokuReducer(state, action) {
         newState.colBlock = colBlocks;
       }
       break;
-    case "redo":
+    case 'redo':
       if (historyIndex + 1 < newState.history.length) {
         historyIndex++;
         const [grid, { to }] = newState.history[historyIndex];
@@ -128,7 +130,7 @@ function sudokuReducer(state, action) {
         newState.colBlock = colBlocks;
       }
       break;
-    case "setHistory":
+    case 'setHistory':
       if (historyIndex < newState.history.length) {
         newState.history.splice(
           historyIndex + 1,
@@ -145,7 +147,7 @@ function sudokuReducer(state, action) {
 
       historyIndex = newState.history.length - 1;
       break;
-    case "setHighlights":
+    case 'setHighlights':
       const { block, row, col, num, rowBlocks, colBlocks } = setHighlights(
         action.grid
       );
@@ -158,7 +160,7 @@ function sudokuReducer(state, action) {
       newState.colBlock = colBlocks;
 
       break;
-    case "revealCell":
+    case 'revealCell':
       newState.puzzle[newState.currentBlock][newState.currentRow][
         newState.currentCol
       ] =
@@ -166,18 +168,18 @@ function sudokuReducer(state, action) {
           newState.currentCol
         ];
       break;
-    case "moveGrid":
+    case 'moveGrid':
       const { currentBlock, currentCol, currentRow } = newState;
-      if (typeof currentBlock !== "undefined") {
+      if (typeof currentBlock !== 'undefined') {
         let newBlock = currentBlock;
         let newRow = currentRow;
         let newCol = currentCol;
         if (
-          action.key === "ArrowRight" ||
-          action.key === "D" ||
-          action.key === "d" ||
-          action.key === "Tab" ||
-          action.key === " "
+          action.key === 'ArrowRight' ||
+          action.key === 'D' ||
+          action.key === 'd' ||
+          action.key === 'Tab' ||
+          action.key === ' '
         ) {
           if (currentCol === 2 && currentBlock % 3 === 2) {
             newCol = 0;
@@ -190,9 +192,9 @@ function sudokuReducer(state, action) {
           }
         }
         if (
-          action.key === "ArrowLeft" ||
-          action.key === "A" ||
-          action.key === "a"
+          action.key === 'ArrowLeft' ||
+          action.key === 'A' ||
+          action.key === 'a'
         ) {
           if (currentBlock % 3 === 0 && currentCol === 0) {
             newBlock = currentBlock + 2;
@@ -205,10 +207,10 @@ function sudokuReducer(state, action) {
           }
         }
         if (
-          action.key === "ArrowDown" ||
-          action.key === "S" ||
-          action.key === "s" ||
-          action.key === "Enter"
+          action.key === 'ArrowDown' ||
+          action.key === 'S' ||
+          action.key === 's' ||
+          action.key === 'Enter'
         ) {
           if (currentRow === 2 && currentBlock > 5) {
             newRow = 0;
@@ -221,9 +223,9 @@ function sudokuReducer(state, action) {
           }
         }
         if (
-          action.key === "ArrowUp" ||
-          action.key === "W" ||
-          action.key === "w"
+          action.key === 'ArrowUp' ||
+          action.key === 'W' ||
+          action.key === 'w'
         ) {
           if (currentRow === 0 && currentBlock < 3) {
             newRow = 2;
@@ -259,10 +261,10 @@ function sudokuReducer(state, action) {
         newState.colBlock = c;
       }
       break;
-    case "disableHighlights":
+    case 'disableHighlights':
       newState.disableHighlights = true;
       break;
-    case "enableHighlights":
+    case 'enableHighlights':
       newState.disableHighlights = false;
       break;
     default:
@@ -283,7 +285,7 @@ function SudokuProvider({ children }) {
 function useSudoku() {
   const context = useContext(SudokuContext);
   if (context === undefined) {
-    throw new Error("useSudoku must be used within a SudokuProvider component");
+    throw new Error('useSudoku must be used within a SudokuProvider component');
   }
   return context;
 }

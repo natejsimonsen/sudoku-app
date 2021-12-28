@@ -1,15 +1,8 @@
-import React, { useContext, useReducer } from "react";
-import colors from "../config/colors";
-import _ from "lodash";
+import React, { useContext, useReducer } from 'react';
+import colors from '../config/colors';
+import _ from 'lodash';
 
-// let userSettings;
-
-const userSettings =
-  typeof localStorage !== "undefined" && localStorage.getItem("settings");
-
-let config;
-
-const defaultConfig = {
+let defaultConfig = {
   showUserErrors: true,
   highlightBlocks: true,
   highlightRows: true,
@@ -17,51 +10,50 @@ const defaultConfig = {
   highlightSameNumbers: true,
   themes: _.cloneDeep(colors),
   theme: colors.default,
-  nameOfTheme: "",
+  nameOfTheme: '',
   disableClick: false,
 };
 
-if (typeof localStorage !== "undefined") {
-  config = userSettings ? JSON.parse(userSettings) : defaultConfig;
-}
-
-const UserConfigContext = React.createContext(config);
+const UserConfigContext = React.createContext(defaultConfig);
 
 const userConfigReducer = (state, action) => {
   let settings;
   switch (action.type) {
-    case "changeTheme":
+    case 'loadSettings':
+      settings = action.settings;
+      break;
+    case 'changeTheme':
       settings = {
         ...state,
         theme: state.themes[action.name],
         nameOfTheme: action.name,
       };
       break;
-    case "addTheme":
+    case 'addTheme':
       settings = {
         ...state,
         themes: { ...state.themes, [action.name]: action.theme },
       };
       break;
-    case "toggleErrors":
+    case 'toggleErrors':
       settings = { ...state, showUserErrors: !state.showUserErrors };
       break;
-    case "highlightBlocks":
+    case 'highlightBlocks':
       settings = { ...state, highlightBlocks: !state.highlightBlocks };
       break;
-    case "highlightRows":
+    case 'highlightRows':
       settings = { ...state, highlightRows: !state.highlightRows };
       break;
-    case "highlightColumns":
+    case 'highlightColumns':
       settings = { ...state, highlightCols: !state.highlightCols };
       break;
-    case "highlightSameNumbers":
+    case 'highlightSameNumbers':
       settings = {
         ...state,
         highlightSameNumbers: !state.highlightSameNumbers,
       };
       break;
-    case "highlightNumbers":
+    case 'highlightNumbers':
       settings = { ...state, showUserErrors: !state.showUserErrors };
       break;
     default:
@@ -69,13 +61,20 @@ const userConfigReducer = (state, action) => {
         `There is no action with type of ${action.type} in userConfigReducer, please specify a valid option`
       );
   }
-  typeof localStorage !== "undefined" &&
-    localStorage.setItem("settings", JSON.stringify(settings));
+  typeof localStorage !== 'undefined' &&
+    localStorage.setItem('settings', JSON.stringify(settings));
   return settings;
 };
 
 const UserConfigProvider = ({ children }) => {
-  const context = useReducer(userConfigReducer, config);
+  const context = useReducer(userConfigReducer, defaultConfig);
+  React.useEffect(() => {
+    // this is the dispatch for the reducer to load localstorage settings
+    context[1]({
+      type: 'loadSettings',
+      settings: JSON.parse(localStorage.getItem('settings')),
+    });
+  }, []);
   return (
     <UserConfigContext.Provider value={context}>
       {children}

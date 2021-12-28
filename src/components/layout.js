@@ -1,9 +1,9 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import { useStaticQuery, graphql } from "gatsby";
-import { useUserConfig } from "../context/userConfigContext";
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import { useStaticQuery, graphql } from 'gatsby';
+import { useUserConfig } from '../context/userConfigContext';
 
-import Header from "./header";
+import Header from './Header';
 
 const Layout = ({ children }) => {
   const { state } = useUserConfig();
@@ -26,13 +26,13 @@ const Layout = ({ children }) => {
     >
       <div
         style={{
-          minHeight: "calc(100vh - 5rem)",
+          minHeight: 'calc(100vh - 5rem)',
         }}
       >
         <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
         <div
           style={{
-            margin: "0 auto",
+            margin: '0 auto',
             padding: `0 1.0875rem 1.45rem`,
           }}
         >
