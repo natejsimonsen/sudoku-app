@@ -5,6 +5,7 @@ import { useUserConfig } from '../context/userConfigContext';
 import { useKey } from 'react-use';
 import _ from 'lodash';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { getBlockRowColIndices } from '../utils/sudokuHelpers';
 
 const acceptedKeys = [
   '1',
@@ -48,6 +49,10 @@ const SudokuGrid = (props) => {
   const [state, dispatch] = useSudoku();
   const { state: themeState } = useUserConfig();
 
+  const { blockIndicies, rowIndicies, colIndicies } = getBlockRowColIndices(
+    state.coords
+  );
+
   const keyPressHandler = (event) => {
     if (state.disableHighlights) return;
     event.preventDefault();
@@ -72,26 +77,6 @@ const SudokuGrid = (props) => {
 
   useKey((event) => acceptedKeys.includes(event.key), keyPressHandler);
 
-  const handleBlockClick = (e) => {
-    e.preventDefault();
-
-    if (props.loading) return;
-
-    const block = e.target.closest('.sudoku-block');
-    const sudokuCell = e.target.closest('.sudoku-cell');
-
-    const rowNum = +sudokuCell.dataset.row;
-    const columnNum = +sudokuCell.dataset.column;
-    const currentNum = +sudokuCell.dataset.number;
-    const blockNum = +block.dataset.block;
-
-    dispatch({ type: 'enableHighlights' });
-    dispatch({
-      type: 'setHighlights',
-      grid: [blockNum, rowNum, columnNum, currentNum],
-    });
-  };
-
   // min is 320 px
   // max is none
   // best results within 400-800 px
@@ -111,13 +96,15 @@ const SudokuGrid = (props) => {
     <ClickAwayListener onClickAway={handleClickAway}>
       <section
         className="grid grid-cols-3 grid-rows-3"
+        onClick={() => {
+          dispatch({ type: 'enableHighlights' });
+        }}
         style={{
           border: `1px solid ${themeState.theme.borderColor}`,
           boxSizing: 'content-box',
           width: sudokuGridWidth,
           height: sudokuGridWidth,
         }}
-        onMouseDown={handleBlockClick}
         id="sudokuGrid"
       >
         {(!state || !state.puzzle || state?.puzzle?.length === 0) &&
@@ -132,7 +119,9 @@ const SudokuGrid = (props) => {
           ))}
         {state?.puzzle?.map((block, i) => (
           <SudokuBlock
-            completeBlock={props.data?.complete[i]}
+            blockIndicies={blockIndicies}
+            colIndicies={colIndicies}
+            rowIndicies={rowIndicies}
             key={i}
             block={block}
             x={sudokuGridWidth}
