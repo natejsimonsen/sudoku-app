@@ -83,6 +83,7 @@ const SudokuCell = ({ i, x, block, ...props }) => {
   if (props.highlighted === 1) backgroundColor = state.theme.highlightBgColor;
   else if (props.highlighted === 2)
     backgroundColor = state.theme.darkerHighlightBg;
+  else if (props.highlighted === 3) backgroundColor = state.theme.errorBgColor;
 
   const normalModeClass =
     'sudoku-cell font-semibold flex justify-center text-center items-center';

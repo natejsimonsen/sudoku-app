@@ -172,7 +172,8 @@ export default function ColorForm() {
             <div></div>
             {Object.keys(state.theme).map(
               (key) =>
-                key !== 'name' && (
+                key !== 'name' &&
+                key !== 'errorBgColor' && (
                   <Input
                     key={key}
                     description={colorUIMapping[key].description}

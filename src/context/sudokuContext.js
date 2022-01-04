@@ -1,4 +1,5 @@
 import React, { useReducer, useContext } from 'react';
+import { getBlockRowColNums } from '../utils/sudokuHelpers';
 import _ from 'lodash';
 
 const defaultSudokuGrid = {
@@ -7,6 +8,7 @@ const defaultSudokuGrid = {
   complete: [],
   history: [],
   currentNum: 0,
+  invalidNums: [],
   coords: [],
   currentBlock: undefined,
   currentIndex: undefined,
@@ -14,31 +16,30 @@ const defaultSudokuGrid = {
   keyHit: false,
 };
 
+const checkErrors = (grid, coords) => {
+  const removeDuplicatsAndZeros = (arr) => {
+    const errorNums = [];
+    const newArr = arr.reduce((acc, val) => {
+      if (val === 0) return acc;
+      return acc.concat(val.number || val);
+    }, []);
+    newArr.forEach((num) => {
+      if (newArr.filter((val) => val === num).length > 1) errorNums.push(num);
+    });
+    return errorNums;
+  };
+
+  if (coords.length === 0) return [];
+  const { row, col, block } = getBlockRowColNums(grid, coords);
+  return [
+    removeDuplicatsAndZeros(block),
+    removeDuplicatsAndZeros(row),
+    removeDuplicatsAndZeros(col),
+  ];
+};
+
 let historyIndex = 0;
-
 const SudokuContext = React.createContext(defaultSudokuGrid);
-
-function setHighlights(grid) {
-  const [block, row, col, num] = grid;
-  const topBlock = block <= 2;
-  const middleBlock = block > 2 && block < 6;
-  const bottomBlock = block > 5;
-  const leftBlock = block % 3 === 0;
-  const middleRowBlock = block % 3 === 1;
-  const rightBlock = block % 3 === 2;
-
-  let colBlocks = [];
-  let rowBlocks = [];
-
-  if (topBlock) colBlocks = [block + 3, block + 6];
-  if (middleBlock) colBlocks = [block - 3, block + 3];
-  if (bottomBlock) colBlocks = [block - 3, block - 6];
-  if (leftBlock) rowBlocks = [block + 1, block + 2];
-  if (middleRowBlock) rowBlocks = [block - 1, block + 1];
-  if (rightBlock) rowBlocks = [block - 1, block - 2];
-
-  return { block, row, col, num, rowBlocks, colBlocks };
-}
 
 function sudokuReducer(state, action) {
   let newState = _.cloneDeep(state);
@@ -98,28 +99,18 @@ function sudokuReducer(state, action) {
       break;
     case 'undo':
       if (historyIndex >= 0 && newState.history.length > 0) {
-        const [grid, { from }] = newState.history[historyIndex];
-        console.log(from);
-        // const { block, row, col, num, rowBlocks, colBlocks } = setHighlights([
-        //   ...grid,
-        //   from,
-        // ]);
-        // historyIndex--;
-
-        // newState.puzzle[block][row][col] = num;
-        // newState.currentBlock = block;
-        // newState.currentRow = row;
-        // newState.currentCol = col;
-        // newState.currentNum = num.number || num;
-        // newState.rowBlock = rowBlocks;
-        // newState.colBlock = colBlocks;
+        const [coords, { from }] = newState.history[historyIndex];
+        newState.coords = coords;
+        newState.puzzle[coords[0]][coords[1]] = from;
+        historyIndex -= 1;
       }
       break;
     case 'redo':
       if (historyIndex + 1 < newState.history.length) {
         historyIndex++;
-        const [grid, { to }] = newState.history[historyIndex];
-        console.log(to);
+        const [coords, { to }] = newState.history[historyIndex];
+        newState.coords = coords;
+        newState.puzzle[coords[0]][coords[1]] = to;
       }
       break;
     case 'setHistory':
@@ -130,7 +121,7 @@ function sudokuReducer(state, action) {
         );
       }
       newState.history.push([
-        action.grid,
+        newState.coords,
         {
           from: action.data,
           to: newState.puzzle[newState.coords[0]][newState.coords[1]],
@@ -140,8 +131,11 @@ function sudokuReducer(state, action) {
       historyIndex = newState.history.length - 1;
       break;
     case 'setCoords':
+      const newNum =
+        newState.puzzle[action.coords[0]][action.coords[1]].number ||
+        newState.puzzle[action.coords[0]][action.coords[1]];
       newState.coords = action.coords;
-      newState.currentNum = newState.puzzle[action.coords[0]][action.coords[1]];
+      newState.currentNum = newNum;
       break;
     case 'revealCell':
       newState.puzzle[newState.coords[0]][newState.coords[1]] =
@@ -197,7 +191,7 @@ function sudokuReducer(state, action) {
         action.key === 'W' ||
         action.key === 'w'
       ) {
-        if (cell / 3 > 1) newState.coords = [block, cell - 3];
+        if (cell / 3 >= 1) newState.coords = [block, cell - 3];
         else if (cell / 3 <= 1 && block / 3 >= 1)
           newState.coords = [block - 3, cell + 6];
         else newState.coords = [(block % 3) + 6, (cell % 3) + 6];
@@ -216,6 +210,8 @@ function sudokuReducer(state, action) {
         `Type of ${action.type} is not an accepted type of SudokuReducer`
       );
   }
+  const errors = checkErrors(newState.puzzle, newState.coords);
+  newState.invalidNums = errors;
   return newState;
 }
 

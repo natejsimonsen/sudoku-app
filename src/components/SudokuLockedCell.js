@@ -14,9 +14,9 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
   else sudokuNumberColor = state.theme.errorColor;
 
   if (props.highlighted === 1) backgroundColor = state.theme.highlightBgColor;
-  else if (props.highlighted === 2) {
+  else if (props.highlighted === 2)
     backgroundColor = state.theme.darkerHighlightBg;
-  }
+  else if (props.highlighted === 3) backgroundColor = state.theme.errorBgColor;
 
   const borderStyle = {};
 

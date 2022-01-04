@@ -3,6 +3,7 @@ import SudokuCell from './SudokuCell';
 import SudokuLockedCell from './SudokuLockedCell';
 import { useUserConfig } from '../context/userConfigContext';
 import { useSudoku } from '../context/sudokuContext';
+import { useNetworkState } from 'react-use';
 
 const SudokuBlock = (props) => {
   const { state: themeState } = useUserConfig();
@@ -39,26 +40,10 @@ const SudokuBlock = (props) => {
             ))
           : props.block.map((item, i) => {
               let highlighted = 0;
+              let blockHighlighted = 0;
+              let rowHighlighted = 0;
+              let colHighlighted = 0;
               const number = item.number || item;
-
-              if (themeState.highlightBlocks)
-                props.blockIndicies.forEach(([blockIndex, cellIndex]) => {
-                  if (block === blockIndex && i === cellIndex) {
-                    highlighted = 1;
-                  }
-                });
-              if (themeState.highlightRows)
-                props.rowIndicies.forEach(([blockIndex, cellIndex]) => {
-                  if (block === blockIndex && i === cellIndex) {
-                    highlighted = 1;
-                  }
-                });
-              if (themeState.highlightCols)
-                props.colIndicies.forEach(([blockIndex, cellIndex]) => {
-                  if (block === blockIndex && i === cellIndex) {
-                    highlighted = 1;
-                  }
-                });
 
               if (
                 themeState.highlightSameNumbers &&
@@ -66,6 +51,34 @@ const SudokuBlock = (props) => {
                 number !== 0
               )
                 highlighted = 1;
+
+              props.blockIndicies.forEach(([blockIndex, cellIndex]) => {
+                if (block === blockIndex && i === cellIndex) {
+                  if (themeState.highlightBlocks && highlighted !== 3)
+                    highlighted = 1;
+                  if (state.invalidNums[0].includes(number)) {
+                    highlighted = 3;
+                  }
+                }
+              });
+              props.rowIndicies.forEach(([blockIndex, cellIndex]) => {
+                if (block === blockIndex && i === cellIndex) {
+                  if (themeState.highlightRows && highlighted !== 3)
+                    highlighted = 1;
+                  if (state.invalidNums[1].includes(number)) {
+                    highlighted = 3;
+                  }
+                }
+              });
+              props.colIndicies.forEach(([blockIndex, cellIndex]) => {
+                if (block === blockIndex && i === cellIndex) {
+                  if (themeState.highlightCols && highlighted !== 3)
+                    highlighted = 1;
+                  if (state.invalidNums[2].includes(number)) {
+                    highlighted = 3;
+                  }
+                }
+              });
 
               if (state.coords[0] === block && state.coords[1] === i)
                 highlighted = 2;

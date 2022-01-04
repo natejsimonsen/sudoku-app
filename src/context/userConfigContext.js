@@ -1,6 +1,7 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useEffect } from 'react';
 import colors from '../config/colors';
 import _ from 'lodash';
+import tinycolor from 'tinycolor2';
 
 let defaultConfig = {
   showUserErrors: true,
@@ -16,11 +17,21 @@ let defaultConfig = {
 
 const UserConfigContext = React.createContext(defaultConfig);
 
+const generateErrorBg = (color, bgColor) => {
+  const bgColorDark = tinycolor(bgColor).isDark();
+  if (bgColorDark) return tinycolor(color).darken(20).toString();
+  return tinycolor(color).brighten(20).toString();
+};
+
 const userConfigReducer = (state, action) => {
   let settings;
   switch (action.type) {
     case 'loadSettings':
       settings = action.settings;
+      settings.theme.errorBgColor = generateErrorBg(
+        settings.theme.errorColor,
+        settings.theme.bgColor
+      );
       break;
     case 'changeTheme':
       settings = {
@@ -28,6 +39,10 @@ const userConfigReducer = (state, action) => {
         theme: state.themes[action.name],
         nameOfTheme: action.name,
       };
+      settings.theme.errorBgColor = generateErrorBg(
+        settings.theme.errorColor,
+        settings.theme.bgColor
+      );
       break;
     case 'addTheme':
       settings = {
@@ -68,12 +83,14 @@ const userConfigReducer = (state, action) => {
 
 const UserConfigProvider = ({ children }) => {
   const context = useReducer(userConfigReducer, defaultConfig);
-  React.useEffect(() => {
+  useEffect(() => {
     // this is the dispatch for the reducer to load localstorage settings
-    context[1]({
-      type: 'loadSettings',
-      settings: JSON.parse(localStorage.getItem('settings')),
-    });
+    const userSettings = JSON.parse(localStorage.getItem('settings'));
+    if (userSettings)
+      context[1]({
+        type: 'loadSettings',
+        settings: userSettings,
+      });
   }, []);
   return (
     <UserConfigContext.Provider value={context}>
