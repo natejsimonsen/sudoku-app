@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import { SudokuProvider } from '../context/sudokuContext';
-import { UserConfigProvider } from '../context/userConfigContext';
-import Layout from '../components/Layout';
-import Seo from '../components/Seo';
-import SudokuGrid from '../components/SudokuGrid';
-import SudokuToolbar from '../components/SudokuToolbar';
+import { SudokuProvider } from "../context/sudokuContext";
+import { UserConfigProvider } from "../context/userConfigContext";
+import Layout from "../components/Layout";
+import Seo from "../components/Seo";
+import SudokuGrid from "../components/SudokuGrid";
+import SudokuToolbar from "../components/SudokuToolbar";
 
 const IndexPage = () => {
   const [clicked, setClick] = React.useState(false);
@@ -14,9 +14,7 @@ const IndexPage = () => {
   const [loading, setLoading] = React.useState(true);
 
   const apiUrl =
-    process.env.NODE_ENV === 'production'
-      ? 'https://sudoku-generator-api.herokuapp.com/?difficulty=55'
-      : 'http://localhost:3000/?difficulty=55';
+    "https://nate-simonsen-sudoku-generator.herokuapp.com/?difficulty=55";
 
   React.useEffect(() => {
     setLoading(true);
