@@ -92,6 +92,7 @@ const SudokuToolbar = (props) => {
           onClick={sudokuDispatch.bind(null, {
             type: 'changeNum',
             data: 'Backspace',
+            delete: true,
           })}
           className="p-2 rounded-lg shadow-xl outline-none hover:opacity-75"
           style={{

@@ -4,10 +4,7 @@ import { useSudoku } from '../context/sudokuContext';
 
 const SudokuLockedCell = ({ i, x, ...props }) => {
   const { state } = useUserConfig();
-  const [sudokuState] = useSudoku();
-
-  const row = Math.floor(i / 3);
-  const col = i % 3;
+  const [sudokuState, dispatch] = useSudoku();
 
   let backgroundColor = state.theme.bgColor;
   let sudokuNumberColor = state.theme.color;
@@ -16,52 +13,14 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
   else if (!state.showUserErrors) sudokuNumberColor = state.theme.successColor;
   else sudokuNumberColor = state.theme.errorColor;
 
-  if (
-    sudokuState.currentBlock === props.block &&
-    sudokuState.currentRow === row &&
-    sudokuState.currentCol === col
-  ) {
+  if (props.highlighted === 1) backgroundColor = state.theme.highlightBgColor;
+  else if (props.highlighted === 2)
     backgroundColor = state.theme.darkerHighlightBg;
-  } else if (
-    sudokuState.currentBlock === props.block &&
-    state.highlightBlocks
-  ) {
-    backgroundColor = state.theme.highlightBgColor;
-  } else if (
-    sudokuState.colBlock?.includes(props.block) &&
-    sudokuState.currentCol === col &&
-    state.highlightCols
-  ) {
-    backgroundColor = state.theme.highlightBgColor;
-  } else if (
-    sudokuState.rowBlock?.includes(props.block) &&
-    sudokuState.currentRow === row &&
-    state.highlightRows
-  ) {
-    backgroundColor = state.theme.highlightBgColor;
-  } else if (
-    sudokuState.currentNum !== 0 &&
-    props.number !== 0 &&
-    props.number === sudokuState.currentNum &&
-    state.highlightSameNumbers
-  ) {
-    backgroundColor = state.theme.highlightBgColor;
-  } else if (
-    sudokuState.currentBlock === props.block &&
-    state.highlightCols &&
-    col === sudokuState.currentCol
-  ) {
-    backgroundColor = state.theme.highlightBgColor;
-  } else if (
-    sudokuState.currentBlock === props.block &&
-    state.highlightRows &&
-    row === sudokuState.currentRow
-  ) {
-    backgroundColor = state.theme.highlightBgColor;
-  }
+  else if (props.highlighted === 3) backgroundColor = state.theme.errorBgColor;
 
   const borderStyle = {};
 
+  // borders work ok for now
   if (i % 3 < 2) {
     borderStyle.borderRight = `1px solid ${state.theme.borderColor}`;
   }
@@ -73,6 +32,9 @@ const SudokuLockedCell = ({ i, x, ...props }) => {
   return (
     <div
       className={`font-semibold sudoku-cell flex justify-center text-center items-center`}
+      onClick={() => {
+        dispatch({ type: 'setCoords', coords: [props.block, i] });
+      }}
       style={{
         fontSize: x / 14,
         height: x / 9,
