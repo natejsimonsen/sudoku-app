@@ -17,10 +17,12 @@ const defaultSudokuGrid = {
 };
 
 const checkErrors = (grid, coords) => {
-  const removeDuplicatsAndZeros = (arr) => {
+  if (coords.length === 0) return [];
+
+  const reduceArr = (arr) => {
     const errorNums = [];
     const newArr = arr.reduce((acc, val) => {
-      if (val === 0) return acc;
+      if (val === 0 || Array.isArray(val)) return acc;
       return acc.concat(val.number || val);
     }, []);
     newArr.forEach((num) => {
@@ -29,13 +31,8 @@ const checkErrors = (grid, coords) => {
     return errorNums;
   };
 
-  if (coords.length === 0) return [];
   const { row, col, block } = getBlockRowColNums(grid, coords);
-  return [
-    removeDuplicatsAndZeros(block),
-    removeDuplicatsAndZeros(row),
-    removeDuplicatsAndZeros(col),
-  ];
+  return [reduceArr(block), reduceArr(row), reduceArr(col)];
 };
 
 let historyIndex = 0;
@@ -91,6 +88,15 @@ function sudokuReducer(state, action) {
       newState.puzzle[newState.coords[0]][newState.coords[1]] = 0;
       break;
     case 'changeNum':
+      if (!newState.notes && !action.delete) {
+        const filterArr = (arr) => arr.filter((item) => Array.isArray(item));
+        const { row, col, block } = getBlockRowColNums(
+          newState.puzzle,
+          newState.coords
+        );
+        const testArr = [filterArr(block), filterArr(row), filterArr(col)];
+        console.log(testArr[0].some((item) => item.includes(action.data)));
+      }
       newState = {
         ...newState,
         currentNum: action.data,
@@ -197,6 +203,7 @@ function sudokuReducer(state, action) {
         else newState.coords = [(block % 3) + 6, (cell % 3) + 6];
       }
       newState.currentNum =
+        newState.puzzle[newState.coords[0]][newState.coords[1]].number ||
         newState.puzzle[newState.coords[0]][newState.coords[1]];
       break;
     case 'disableHighlights':

@@ -40,9 +40,6 @@ const SudokuBlock = (props) => {
             ))
           : props.block.map((item, i) => {
               let highlighted = 0;
-              let blockHighlighted = 0;
-              let rowHighlighted = 0;
-              let colHighlighted = 0;
               const number = item.number || item;
 
               if (
