@@ -14,9 +14,7 @@ const IndexPage = () => {
   const [loading, setLoading] = React.useState(true);
 
   const apiUrl =
-    process.env.NODE_ENV === "production"
-      ? "https://nate-simonsen-sudoku-generator.herokuapp.com/?difficulty=55"
-      : "http://localhost:3000/?difficulty=55";
+    "https://nate-simonsen-sudoku-generator.herokuapp.com/?difficulty=55";
 
   React.useEffect(() => {
     setLoading(true);
