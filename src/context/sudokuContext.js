@@ -31,7 +31,7 @@ const checkErrors = (grid, coords) => {
     return errorNums;
   };
 
-  const { row, col, block } = getBlockRowColNums(grid, coords);
+  const [[block], [row], [col]] = getBlockRowColNums(grid, coords);
   return [reduceArr(block), reduceArr(row), reduceArr(col)];
 };
 
@@ -56,6 +56,7 @@ function sudokuReducer(state, action) {
       ]
         .sort()
         .findIndex((val) => val === action.data);
+      const arr = [];
       newState.puzzle[newState.coords[0]][newState.coords[1]]
         .sort()
         .splice(removeIndex, 1);
@@ -90,12 +91,32 @@ function sudokuReducer(state, action) {
     case 'changeNum':
       if (!newState.notes && !action.delete) {
         const filterArr = (arr) => arr.filter((item) => Array.isArray(item));
-        const { row, col, block } = getBlockRowColNums(
-          newState.puzzle,
-          newState.coords
-        );
-        const testArr = [filterArr(block), filterArr(row), filterArr(col)];
-        console.log(testArr[0].some((item) => item.includes(action.data)));
+        // not destructed so indexes can be accessed progamatically in the for loop below
+        const gridData = getBlockRowColNums(newState.puzzle, newState.coords);
+        const testArr = [
+          filterArr(gridData[0][0]),
+          filterArr(gridData[1][0]),
+          filterArr(gridData[2][0]),
+        ];
+        for (let i = 0; i < testArr.length; i++) {
+          const hasNotesToRemove = testArr[i].some((item) =>
+            item.includes(action.data)
+          );
+          if (hasNotesToRemove) {
+            gridData[i][1].forEach(([blockIndex, cellIndex]) => {
+              const cell = newState.puzzle[blockIndex][cellIndex];
+              if (Array.isArray(cell)) {
+                const removeIndex = newState.puzzle[blockIndex][cellIndex]
+                  .sort()
+                  .findIndex((val) => val === action.data);
+                if (removeIndex >= 0)
+                  newState.puzzle[blockIndex][cellIndex]
+                    .sort()
+                    .splice(removeIndex, 1);
+              }
+            });
+          }
+        }
       }
       newState = {
         ...newState,

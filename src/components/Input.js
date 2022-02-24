@@ -7,6 +7,7 @@ export default function Input(props) {
   const { state: userState } = useUserConfig();
   const [focused, setFocused] = useState(false);
   const { id, errors, values, state, touched } = props;
+
   return (
     <div className="flex flex-col justify-center mx-auto">
       <div className="flex">
