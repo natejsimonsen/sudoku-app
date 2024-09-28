@@ -3,7 +3,6 @@ import SudokuCell from './SudokuCell';
 import SudokuLockedCell from './SudokuLockedCell';
 import { useUserConfig } from '../context/userConfigContext';
 import { useSudoku } from '../context/sudokuContext';
-import { useNetworkState } from 'react-use';
 
 const SudokuBlock = (props) => {
   const { state: themeState } = useUserConfig();

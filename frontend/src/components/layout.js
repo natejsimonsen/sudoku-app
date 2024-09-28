@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
 import { useUserConfig } from '../context/userConfigContext';
 
-import Header from './Header';
+import Header from './header';
 
 const Layout = ({ children }) => {
   const { state } = useUserConfig();

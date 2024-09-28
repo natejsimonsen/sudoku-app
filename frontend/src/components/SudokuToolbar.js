@@ -13,8 +13,8 @@ const nonNegative = (i) => {
   return i;
 };
 
-const SudokuToolbar = (props) => {
-  const { state: userState, dispatch } = useUserConfig();
+const SudokuToolbar = () => {
+  const { state: userState } = useUserConfig();
 
   const [sudokuState, sudokuDispatch] = useSudoku();
   const [height, setHeight] = useState(100);
